@@ -1,0 +1,9 @@
+.mainBody {
+    .leftNav {
+        width: 150px;
+    }
+
+    .workBody {
+        width: calc(100% - 150px);
+    }
+}

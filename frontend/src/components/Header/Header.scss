@@ -1,0 +1,24 @@
+.Header {
+    height: 50px;
+    display: flex;
+    justify-content: center;
+
+    .headerContent {
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        .meImg {
+            height: 80%;
+            width: auto;
+        }
+
+        .headerText {
+            margin-left: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    }
+}
