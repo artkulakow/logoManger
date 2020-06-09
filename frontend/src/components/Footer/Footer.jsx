@@ -1,14 +1,19 @@
 import React from 'react';
 
+import './Footer.scss';
+
 
 class Footer extends React.Component {
-    constructor(props) {
-        super(props);
-    }
-
     render() {
         return (
-            "Footer"
+            <footer className="footer">
+                <div className="copyright">
+                    &copy;Arthur Kulakow 2020
+                </div>
+                <div className="version">
+                    Version:&nbsp;0.1
+                </div>
+            </footer>
         );
     }
 }
