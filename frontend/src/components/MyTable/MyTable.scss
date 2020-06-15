@@ -1,0 +1,36 @@
+.myTableDiv {
+    .scrollTable {
+        border: 1px solid #963;
+        width: 100%;
+
+        .fixedHeader {
+            tr {
+                height: 30px;
+                background-color: #c96;
+
+                th {
+                    border-right: 1px solid black;
+                }
+            }
+        }
+
+        .scrollContent {
+            height: 400px;
+            overflow: auto;
+
+            
+            tr {
+                background-color: #eee;
+
+                td {
+                    border-right: 1px solid black;
+                    height: 25px;
+                }
+
+                &.alternateRow {
+                    background-color: #fff;
+                }
+            }
+        }
+    }
+}

@@ -1,9 +1,45 @@
 .mainBody {
+    width: 100%;
+
     .leftNav {
         width: 150px;
+        background-color: #f0f0f0;
+
+        .linkEntry {
+            height: 30px;
+            line-height: 30px;
+            width: inherit;
+            color: #000;
+
+            &.selected {
+                background-color: #777;
+                color:#fff;
+            }
+
+            &:first-child {
+                margin-top: 15px;
+            }
+            
+            a, a:visited, a:hover, a:active {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            a:hover {
+                font-weight: bold;
+            }
+
+            .linkBtn {
+                font-size: 16px;
+                line-height: 1.1;
+                display: inline-block;
+                vertical-align: middle;
+                padding-left: 15px;
+            }
+        }
     }
 
-    .workBody {
+    .workArea {
         width: calc(100% - 150px);
     }
 }

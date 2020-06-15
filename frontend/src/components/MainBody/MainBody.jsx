@@ -19,44 +19,73 @@ const routes = [
         path: "/",
         name: 'Home',
         exact: true,
+        state: 'home',
         component: () => <Home/>,
     },
     {
         path: "/themes",
         name: 'Themes',
+        state: 'thems',
         component: () => <Themes />,
     },
     {
         path: "/colors",
         name: 'Colors',
+        state: 'colors',
         component: () => <Colors />,
     },
     {
         path: "/bricks",
         name: 'Bricks',
+        state: 'bricks',
         component: () => <Bricks />,
     },
     {   path: '/admin',
         name: 'Admin',
+        state: 'admin',
         component: () => <Admin />,
     }
 ];
 
 class MainBody extends Component {
-    // constructor(props) {
-    //     super(props);
-    // }
+    displayName = "MainBody";
+    
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            selectedTab: 'home',
+        }
+    }
+
+    onClickNavHandler = (newState) => {
+        console.log(newState);
+        this.setState({selectedTab: newState})
+    }
 
     render() {
+        const {selectedTab} = this.state;
+
         return (
             <div className='mainBody'>
                 <Router>
                     <div className='leftNav'>
-                        {routes.map((route, index) => (
-                            <div key={index} className="linkEntry">
-                                <Link to={route.path}>{route.name}</Link>
-                            </div>
-                        ))}
+                        {routes.map((route, index) => { 
+                            let entryStyle = 'linkEntry';
+                            if (route.state === selectedTab) {
+                                entryStyle += ' selected';
+                            }
+
+                            return (
+                                <div key={index} className={entryStyle}>
+                                    <Link to={route.path}>
+                                        <div className="linkBtn" onClick={() => {this.onClickNavHandler(route.state)}}>
+                                            {route.name}
+                                        </div>
+                                    </Link>
+                                </div>
+                            )}
+                        )}
                     </div>
 
                     <div className='workArea'>
