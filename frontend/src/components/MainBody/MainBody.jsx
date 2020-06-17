@@ -59,7 +59,6 @@ class MainBody extends Component {
     }
 
     onClickNavHandler = (newState) => {
-        console.log(newState);
         this.setState({selectedTab: newState})
     }
 

@@ -10,14 +10,18 @@ class MyTable extends Component {
 
     renderEntry(entryIndex) {
         const {data, columns} = this.props;
-        console.log('columns: ', columns);
-        console.log('data: ', data);
 
         const entry = columns.map((c, cIndex) => {
+            let val = data[entryIndex][c.field];
+            if (!val)
+                val = '--';
+
             return (
-                <td key={entryIndex-cIndex} style={c.entryStyle}>
-                    {data[entryIndex][c.field]}
-                </td>
+                <div key={entryIndex-cIndex} className="contentEntry" style={c.entryStyle}>
+                    <div className="label">
+                        {val}
+                    </div>
+                </div>
             )
         })
 
@@ -34,17 +38,19 @@ class MyTable extends Component {
         }
 
         return (
-            <tbody className="scrollContent">
-                {data.map((d, index) => {
-                    const lineStyle = index % 2 === 0 ? 'alternateRow' : 'normalRow';
+            <div className="scrollContent">
+                <div className="scrollContentInner">
+                    {data.map((d, index) => {
+                        const lineStyle = index % 2 === 0 ? 'contentLine alternateRow' : 'contentLine normalRow';
 
-                    return (
-                        <tr key={index} className={lineStyle}>
-                            {this.renderEntry(index)}
-                        </tr>
-                    )
-                })}
-            </tbody>
+                        return (
+                            <div key={index} className={lineStyle}>
+                                {this.renderEntry(index)}
+                            </div>
+                        )
+                    })}
+                </div>
+            </div>
         )
     }
 
@@ -63,17 +69,19 @@ class MyTable extends Component {
 
         return (
             <div className="myTableDiv" style={tableStyle}>
-                <table cellSpacing="0" cellPadding="0" className="scrollTable">
-                    <thead className="fixedHeader">
-                        <tr>
+                <div cellSpacing="0" cellPadding="0" className="scrollTable">
+                    <div className="fixedHeader">
+                        <div className="headerLine">
                             {columns.map((c, index) => (
-                                <th key={index} style={c.headerStyle}>{c.label}</th>
+                                <div key={index} className="headerEntry" style={c.headerStyle}>
+                                    <div className="label">{c.label}</div>
+                                </div>
                             ))}
-                        </tr>
-                    </thead>
+                        </div>
+                    </div>
 
                     {this.renderData()}
-                </table>
+                </div>
 
                 {this.renderLoading()}
             </div>
