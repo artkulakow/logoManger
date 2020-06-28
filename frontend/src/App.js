@@ -7,7 +7,7 @@ import Footer from './components/Footer/Footer';
 
 export default function App() {
   return (
-    <div className="legoManager">
+    <div id="legoManager" className="legoManager">
         <div className="header">
             <Header />
         </div>

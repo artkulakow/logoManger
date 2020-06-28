@@ -62,6 +62,10 @@
                     &.alternateRow {
                         background-color: #fff;
                     }
+
+                    &.selected {
+                        background-color: red;
+                    }
                 }
             }
         }

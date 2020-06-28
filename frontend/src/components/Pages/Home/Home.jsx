@@ -1,5 +1,5 @@
 import React, {Component, createRef} from 'react';
-//import ReactModal from 'react-modal';
+import Modal from 'react-modal';
 import {readString} from 'react-papaparse';
 import {connect} from "react-redux";
 
@@ -15,24 +15,26 @@ const legoColumns = [
         headerStyle: {width:'149px'},
         entryStyle: {width: '149px'},
         position: 'left',
-        sortable: true,
         field: 'Item Number',
+        sortable: true,
+        sortType: 'number',
+        sortOnLoad: true,
     },
     {
         label: "Theme",
         headerStyle: {width:'249px'},
         entryStyle: {width: '249px'},
         position: 'center',
-        sortable: true,
         field: 'Theme',
+        sortable: true,
     },
     {
         label: "Name",
         headerStyle: {width:"calc(100% - 400px)"},
         entryStyle: {width:"calc(100% - 400px)"},
         position: 'left',
-        sortable: true,
         field: 'Name',
+        sortable: true,
     }
 
 ];
@@ -43,126 +45,80 @@ class Home extends Component {
 
     inputFileRef = createRef();
 
-
     loadDataHandler = () => {
         this.inputFileRef.current.click();
+    }
+
+    handleFile = (e) => {
+        const {loadKits, setFetchKits} = this.props;
+        const content = e.target.result;
+        let convertedData = readString(content, {header: true});
+
+        // add id to the data
+        convertedData = convertedData.data.map((data, index) => {
+            let newData = data;
+            newData.id = index;
+
+            return newData;
+            });
+
+        console.log('raw: ', convertedData)
+
+        loadKits(convertedData);
+
+        setFetchKits(false);
+    }
+    
+    onSelectFileHandler = (file) => {
+        const {setFetchKits} = this.props;
+
+        setFetchKits(true);
+
+        let fileData = new FileReader();
+        fileData.onloadend = this.handleFile;
+        fileData.readAsText(file);
     }
 
     render() {
         const legoFilters = [];
         const legoSelectActions = [];
-        const legoData = [
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-            {
-                itemNumber: 123456789,
-                theme: 'The theme',
-                name: 'This is a kit',
-            },
-        ];
-        const legoDataLoading = false;
 
-        const handleFile = (e) => {
-            const {loadKits, setFetchKits} = this.props;
-            const content = e.target.result;
-            const convertedData = readString(content, {header: true});
-
-            loadKits(convertedData.data);
-
-            setFetchKits(false);
-        }
-        
-        const onChange = (file) => {
-            const {setFetchKits} = this.props;
-
-            setFetchKits(true);
-
-            let fileData = new FileReader();
-            fileData.onloadend = handleFile;
-            fileData.readAsText(file);
-        }
 
         console.log(this.props)
 
-        const {kits, fetchKits} = this.props;
+        const {kits, fetchKits, selectedKit} = this.props;
+
+        if (selectedKit !== -1) {
+            console.log("kit selected: ", selectedKit)
+        }
+
+
+        Modal.setAppElement('body');
+
+        // <Modal
+        //     contentLabel="Kit Details"
+        //     isOpen={selectedKit !== -1}
+        // >
+        //     Kit Details
+        // </Modal>
+
+        kits.sort((a, b) => {
+            a = parseInt(a['Item Number'], 10);
+            if (isNaN(a)) {
+                a = 0;
+            }
+            b = parseInt(b['Item Number'], 10);
+            if (isNaN(b)) {
+                b = 0;
+            }
+            if (a < b)
+                return -1;
+            else if (a > b)
+                return 1
+
+            return 0;
+        })
+
 
         return (
             <div className="home">
@@ -172,7 +128,7 @@ class Home extends Component {
                     accept=".csv"
                     type="file"
                     onChange={e => {
-                        onChange(e.target.files[0]);
+                        this.onSelectFileHandler(e.target.files[0]);
                     }}
                 />
 
@@ -192,7 +148,10 @@ class Home extends Component {
                     selectActions={legoSelectActions}
                     data={kits}
                     loading={fetchKits}
+                    selectEntry={true}
                 />
+
+                
             </div>
         );
     }
@@ -202,6 +161,7 @@ const mapStateToProps = state => {
     return {
         kits: state.kits,
         fetchKits: state.fetchKits,
+        selectedKit: state.selectedKit,
     }
 }
 

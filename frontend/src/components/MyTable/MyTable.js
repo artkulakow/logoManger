@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
+import {connect} from "react-redux";
+
+import {setSelectedKit} from '../../actions/kits';
 
 import Loading from '../Loading/Loading';
 
@@ -8,13 +11,69 @@ import './MyTable.scss';
 class MyTable extends Component {
     displayName = "MyTable";
 
+    constructor(props) {
+        super(props);
+
+
+
+        this.state = {
+            sortColumn: -1,
+            sortDirect: '',
+        }
+    }
+
+
+    componentDidMount() {
+        const {setSelectedKit} = this.props;
+
+        setSelectedKit(-1);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        const {loading, setSelectedKit, fetchKits, columns} = this.props;
+        const {sortColumn}  = this.state;
+
+        if (loading) {
+            setSelectedKit(-1);
+
+            if (sortColumn !== -1) {
+                this.setState(state =>
+                    ({
+                        sortColumn: -1,
+                        sortDirect: ""
+                    })
+                );
+            }
+        }
+
+        if (fetchKits) {
+            for (let c = 0; c < columns; c++) {
+                if (columns[c].sortOnLoad) {
+                    if (sortColumn === -1) {
+                        this.setState({sortColumn: c})
+                    }
+                }
+            }
+
+            console.log('init')
+        }
+    }
+
+    selectLineHandler(index) {
+        const {setSelectedKit, selectEntry} =  this.props;
+
+        if (selectEntry) {
+            setSelectedKit(index);
+        }
+    }
+
     renderEntry(entryIndex) {
         const {data, columns} = this.props;
 
         const entry = columns.map((c, cIndex) => {
             let val = data[entryIndex][c.field];
             if (!val)
-                val = '--';
+                val = '---';
 
             return (
                 <div key={entryIndex-cIndex} className="contentEntry" style={c.entryStyle}>
@@ -31,7 +90,7 @@ class MyTable extends Component {
     }
 
     renderData() {
-        const {data, loading} = this.props;
+        const {data, loading, selectedKit} = this.props;
 
         if (loading) {
             return;
@@ -41,10 +100,13 @@ class MyTable extends Component {
             <div className="scrollContent">
                 <div className="scrollContentInner">
                     {data.map((d, index) => {
-                        const lineStyle = index % 2 === 0 ? 'contentLine alternateRow' : 'contentLine normalRow';
+                        let lineStyle = index % 2 === 0 ? 'contentLine alternateRow' : 'contentLine normalRow';
+                        if (index === selectedKit) {
+                            lineStyle = lineStyle + ' selected';
+                        }
 
                         return (
-                            <div key={index} className={lineStyle}>
+                            <div key={index} className={lineStyle} onClick={() => this.selectLineHandler(index)}>
                                 {this.renderEntry(index)}
                             </div>
                         )
@@ -97,6 +159,7 @@ MyTable.propTypes = {
     data: PropTypes.array,
     loading: PropTypes.bool,
     tableHeight: PropTypes.string,
+    selectEntry: PropTypes.bool,
 };
 
 MyTable.defaultProps = {
@@ -108,4 +171,17 @@ MyTable.defaultProps = {
     tableStyle: {width: '80%'},
 };
 
-export default MyTable;
+const mapStateToProps = state => {
+    return {
+        selectedKit: state.selectedKit,
+        fetchKits: state.fetchKits,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setSelectedKit: k => dispatch(setSelectedKit(k)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MyTable)
