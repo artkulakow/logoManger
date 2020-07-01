@@ -1,25 +1,11 @@
 import  express from 'express';
-import {getKitsList, createKit} from '../controllers/kits.js';
+import {getKitsList, getKitsThemes, createKit} from '../controllers/kits.js';
 
 const router = express.Router();
 
 /* GET kits listing. */
 router.get('/', function(req, res) {
-    getKitsList(req, res)
-
-//   res.send('kits - get list');
-//   let sTag = '';
-//   let sDir = 'descending';
-//   let fValue = '';
-//   let fTag = '';
-//   const {sortTag, sortDir, filterValue, filterTag} = req.query;
-
-//   sTag = sortTag ? sortTag : sTag;
-//   sDir = sortDir ? sortDir : sDir;
-//   fValue = filterValue ? filterValue : fValue;
-//   fTag = filterTag ? filterTag : fTag;
-
-//   console.log(`get kits - tags -> sortTag: ${sTag}, sortDir: ${sDir}, filterTag: ${fTag}, filterValue: ${fValue}`);
+    getKitsList(req, res);
 });
 
 // Add a new entry
@@ -32,7 +18,15 @@ router.post('/', function(req, res) {
 })
 
 // get a kit
-router.get('/:kitId', function(req, res) {
+router.get('/:kitId', function(req, res, next) {
+    const kitId = req.params.kitId;
+
+    if (kitId === 'themes') {
+        next();
+
+        return;
+    }
+
     res.send(`kits - get a kits details --> kitId: ${req.params.kitId}`);
 })
 
@@ -44,6 +38,11 @@ router.put('/:kitId', function(req, res) {
 // delete a kit
 router.delete('/:kitId', function(req, res) {
     res.send(`kits - delete a kit --> kitId: ${req.params.kitId}`);
+})
+
+// get themes in loaded kits
+router.get('/themes', (req, res, next) => {
+    getKitsThemes(req, res, next);
 })
 
 export default router;

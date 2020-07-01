@@ -1,0 +1,25 @@
+.kits {
+    margin: 15px;
+
+    .header {
+        height: 30px;
+        position: relative;
+        width: 80%;
+        margin-bottom: 5px;
+
+        .label {
+            font-size: 24px;
+            font-weight: bold;
+            float: left;
+        }
+
+        .btn {
+            float: right;
+
+            .button {
+                border-radius: 10px;
+                width: 75px;
+            }
+        }
+    }
+}

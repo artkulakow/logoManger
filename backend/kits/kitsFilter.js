@@ -11,17 +11,24 @@ const kitsFilter = (orgKitList, req) => {
 
     fTag = decodeURIComponent(filterTag ? filterTag : fTag);
     fValue = decodeURIComponent(filterValue ? filterValue : fValue);
-    fCaseSensitive = filterCaseSensitive ? (filterCaseSensitive === 'true') : fCaseSensitive;
-    fSubstring = decodeURIComponent(filterSubstring ? (filterTSubstring === 'true'): fSubstring);
+    fCaseSensitive = filterCaseSensitive ? (filterCaseSensitive === 'true') : false;
+    fSubstring = decodeURIComponent(filterSubstring ? (filterSubstring === 'true'): false);
 
     console.log(`kitsFilter -> filterTag: ${fTag}, filterValue: ${fValue}, filterCaseSensitive: ${fCaseSensitive}, $filterSubstring: ${fSubstring}`)
         
     // only do it if there is a filterTag and filterValue
     if (fTag !== '' && fValue !== '') {
         console.log('filter kits');
+        const val = fCaseSensitive ? fValue : fValue.toLowerCase();
         kitList = kitList.filter((kit) => {
             if (kit[fTag]) {
-                return kit[fTag] === fValue
+                const listTag = fCaseSensitive ? kit[fTag] : kit[fTag].toLowerCase();
+                
+                if (fSubstring) {
+                    return listTag.includes(val)
+                }
+
+                return listTag === val;
             }
         })
     }

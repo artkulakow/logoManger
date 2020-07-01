@@ -10,6 +10,7 @@ import kitsSort from '../kits/kitsSort.js';
 let rawKitList = [];
 let rawKitListLoadedAt = -1;
 let rawKitListIds = 100;
+let kitThemes = [];
 
 const kitsDirectory = `../../data/kits/`;
 const cacheDirectory = '../../data/cache/';
@@ -67,6 +68,8 @@ const loadKits = (req, res) => {
                         })
                         
                         resolve(fileName)
+
+
                     })
                 }
 
@@ -115,4 +118,26 @@ export const getKitsList = (req, res) => {
 
 export const createKit = (req, res) => {
     console.log('get kits list')
+}
+
+export const getKitsThemes = (req, res, next) => {
+    console.log('get themes')
+
+console.log(`kitThemes.length: ${kitThemes.length}`)    
+    if (kitThemes.length === 0) {
+        for(let k = 0; k < rawKitList.length; k++) {
+            const theme = rawKitList[k].Theme;
+            if (theme === '') {
+                continue;
+            }
+
+            if (!kitThemes.includes(theme)) {
+                kitThemes.push(theme);
+            }
+        }
+
+        kitThemes.sort();
+    }
+
+    res.json({themes: kitThemes});
 }

@@ -7,6 +7,7 @@ import {
   } from "react-router-dom";
 
 import Home from "../Pages/Home/Home";
+import Kits from '../Pages/Kits/Kits';
 import Themes from "../Pages/Themes/Themes";
 import Colors from "../Pages/Colors/Colors";
 import Bricks from "../Pages/Bricks/Bricks";
@@ -21,6 +22,12 @@ const routes = [
         exact: true,
         state: 'home',
         component: () => <Home/>,
+    },
+    {
+        path: '/kits',
+        name: 'Kits',
+        state: 'kits',
+        component: () => <Kits/>,
     },
     {
         path: "/themes",
