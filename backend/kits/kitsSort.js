@@ -13,7 +13,7 @@ const kitsSort = (orgKitList, req) => {
     sDir = sortDir ? sortDir : sDir;
     sType = sortType ? sortType : sType;
     
-    console.log(`'kitsSort -> sortTag: ' ${sTag}, sortDir: ${sDir}, sortType: ${sType}`)
+    console.log(`kitsSort -> sortTag: ${sTag} - ${sortTag}, sortDir: ${sDir}, sortType: ${sType}`)
 
     if (sTag !== '') {
         console.log('sorting kits')
@@ -37,9 +37,9 @@ const kitsSort = (orgKitList, req) => {
                     return 0;
                 }
                 else {
-                    if (a < b)
+                    if (a > b)
                         return -1;
-                    else if (a > b)
+                    else if (a < b)
                         return 1
         
                     return 0;
@@ -48,8 +48,8 @@ const kitsSort = (orgKitList, req) => {
         }
         else {
             kitList.sort((a, b) => {
-                a = a[sTag].toLowerCase();
-                b = b[sTag].toLowerCase();
+                a = a[sTag] ? a[sTag].toLowerCase() : '';
+                b = b[sTag] ? b[sTag].toLowerCase() : '';
 
                 if (sortDir === 'descending') {
                     if (a < b)
