@@ -49,29 +49,13 @@ class Kits extends Component {
 
     componentDidMount() {
         console.log('component did mount')
-        let params = '';
-        for(let c = 0; c < legoColumns.length; c++) {
-            if (legoColumns[c].sortOnLoad && legoColumns[c].field) {
-                params = '?sortTag=' + legoColumns[c].field;
-
-                if (legoColumns[c].sortType) {
-                    params += '&sortType=' + legoColumns[c].sortType;
-                }
-
-                if (legoColumns[c].sortDir) {
-                    params += '&sortDir=' + legoColumns[c].sortDir;
-                }
-            }
-        }
-        this.props.getKits(params);
     }
 
     render() {
         const legoFilters = [];
         const legoSelectActions = [];
 
-        const {kits, kitsLoading, kitsError, selectedKit} = this.props;
-console.log('props: ', this.props)        
+        const {kits, kitsLoading, kitsError, selectedKit, getKits} = this.props;
 
         if (selectedKit !== -1) {
             console.log("kit selected: ", selectedKit)
@@ -96,6 +80,7 @@ console.log('props: ', this.props)
                     loading={kitsLoading}
                     loadingError={kitsError}
                     selectEntry={true}
+                    fetchDataFunc={getKits}
                 />
 
                 

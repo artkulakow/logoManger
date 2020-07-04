@@ -6,6 +6,7 @@ import {setSelectedKit} from '../../actions/kits';
 
 import Loading from '../Loading/Loading';
 
+import '../../css/icons.css';
 import './MyTable.scss';
 
 class MyTable extends Component {
@@ -17,46 +18,42 @@ class MyTable extends Component {
 
 
         this.state = {
-            sortColumn: -1,
-            sortDirect: '',
+            sortTag: '',
+            sortDir: 'ascending', //ascending (default) / descending
+            sortType: '',
         }
     }
-
 
     componentDidMount() {
-        const {setSelectedKit} = this.props;
+        const {setSelectedKit, columns} = this.props;
 
+        // reset the selected kit
         setSelectedKit(-1);
+
+        for (let c = 0; c < columns.length; c++) {
+            if (columns[c].sortOnLoad && columns[c].field) {
+                this.setState({
+                    sortTag: columns[c].field,
+                    sortDir: columns[c].sortDir,
+                    sortType: columns[c].sortType,
+                }, () => {
+                    this.fetchData(columns[c])
+                });
+            }
+        }
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const {loading, setSelectedKit, fetchKits, columns} = this.props;
-        const {sortColumn}  = this.state;
+    fetchData = (c) => {
+        const {fetchDataFunc} = this.props;
 
-        if (loading) {
-            setSelectedKit(-1);
-
-            if (sortColumn !== -1) {
-                this.setState(state =>
-                    ({
-                        sortColumn: -1,
-                        sortDirect: ""
-                    })
-                );
-            }
+        // fetch the data
+        let parms = '';
+        const {sortTag, sortDir, sortType} = this.state;
+        if (sortTag !== '') {
+            parms = encodeURI(`?sortTag=${sortTag}&sortDir=${sortDir}&sortType=${sortType}`);
         }
 
-        if (fetchKits) {
-            for (let c = 0; c < columns; c++) {
-                if (columns[c].sortOnLoad) {
-                    if (sortColumn === -1) {
-                        this.setState({sortColumn: c})
-                    }
-                }
-            }
-
-            console.log('init')
-        }
+        fetchDataFunc(parms);
     }
 
     selectLineHandler(index) {
@@ -65,6 +62,60 @@ class MyTable extends Component {
         if (selectEntry) {
             setSelectedKit(index);
         }
+    }
+
+    onClickHeaderEntry = (c) => {
+        const {sortTag, sortDir} = this.state;
+
+        if (c.field === sortTag) {
+            this.setState({sortDir: sortDir === 'descending' ? 'ascending' : 'descending'}, () => {
+                this.fetchData(c);
+            }) 
+        }
+        else if (c.sortable) {
+            this.setState({
+                sortDir: 'ascending',
+                sortTag: c.field,
+                sortType: c.sortType ? c.sortType : '',
+            },
+            () => {
+                this.fetchData(c);
+            })
+        }
+    }
+
+    renderHeader() {
+        const {columns} = this.props;
+        const {sortTag, sortDir} = this.state;
+
+        let sortIcon = 'sortDirArrow icon-triangle-dn';
+        if (sortDir === 'descending') {
+            sortIcon = 'sortDirArrow icon-triangle-up';
+        }
+
+
+        const renderHeaderEntrySortArrow = (c) => {
+            if (c.field === sortTag) {
+                return (
+                    <div className={sortIcon}></div>
+                )
+            }
+
+            return
+        }
+
+        return (
+            <div className="fixedHeader">
+                <div className="headerLine">
+                    {columns.map((c, index) => (
+                        <div key={index} className="headerEntry" style={c.headerStyle} onClick={() => this.onClickHeaderEntry(c)}>
+                            {renderHeaderEntrySortArrow(c)}
+                            <div className="label">{c.label}</div>
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )
     }
 
     renderEntry(entryIndex) {
@@ -127,20 +178,12 @@ class MyTable extends Component {
     }
 
     render() {
-        const {columns, tableStyle} = this.props;
+        const {tableStyle} = this.props;
 
         return (
             <div className="myTableDiv" style={tableStyle}>
-                <div cellSpacing="0" cellPadding="0" className="scrollTable">
-                    <div className="fixedHeader">
-                        <div className="headerLine">
-                            {columns.map((c, index) => (
-                                <div key={index} className="headerEntry" style={c.headerStyle}>
-                                    <div className="label">{c.label}</div>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
+                <div className="scrollTable">
+                    {this.renderHeader()}
 
                     {this.renderData()}
                 </div>
@@ -160,6 +203,8 @@ MyTable.propTypes = {
     loading: PropTypes.bool,
     tableHeight: PropTypes.string,
     selectEntry: PropTypes.bool,
+    fetchDataFunc: PropTypes.func,
+    loadingError: PropTypes.object,
 };
 
 MyTable.defaultProps = {
@@ -169,6 +214,7 @@ MyTable.defaultProps = {
     selectActions: [],
     data: [],
     tableStyle: {width: '80%'},
+    fetchDataFunc: undefined,
 };
 
 const mapStateToProps = state => {

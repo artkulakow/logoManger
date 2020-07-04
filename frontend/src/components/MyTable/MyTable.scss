@@ -24,7 +24,20 @@
                         margin-top: 4px;
                         margin-left: 10px;
                         margin-right: 10px;
+                        display: inline-block;
+                        width: calc(100% - 50px);
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
 
+                    .sortDirArrow {
+                        margin-left: 10px;
+                        font-size: 18px;
+                        line-height: 18px;
+                        position: relative;
+                        top: -2px;
+                        display: inline-block;
                     }
                 }
 
