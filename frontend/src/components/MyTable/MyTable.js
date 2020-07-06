@@ -205,6 +205,7 @@ MyTable.propTypes = {
     selectEntry: PropTypes.bool,
     fetchDataFunc: PropTypes.func,
     loadingError: PropTypes.object,
+    displaySearch: PropTypes.bool,
 };
 
 MyTable.defaultProps = {
@@ -215,6 +216,7 @@ MyTable.defaultProps = {
     data: [],
     tableStyle: {width: '80%'},
     fetchDataFunc: undefined,
+    displaySearch: false,
 };
 
 const mapStateToProps = state => {

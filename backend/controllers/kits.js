@@ -11,6 +11,7 @@ let rawKitList = [];
 let rawKitListLoadedAt = -1;
 let rawKitListIds = 100;
 let kitThemes = [];
+let kitLocations = [];
 
 const kitsDirectory = `../../data/kits/`;
 const cacheDirectory = '../../data/cache/';
@@ -121,9 +122,6 @@ export const createKit = (req, res) => {
 }
 
 export const getKitsThemes = (req, res, next) => {
-    console.log('get themes')
-
-console.log(`kitThemes.length: ${kitThemes.length}`)    
     if (kitThemes.length === 0) {
         for(let k = 0; k < rawKitList.length; k++) {
             const theme = rawKitList[k].Theme;
@@ -139,5 +137,25 @@ console.log(`kitThemes.length: ${kitThemes.length}`)
         kitThemes.sort();
     }
 
-    res.json({themes: kitThemes});
+    res.json({kitsThemes: kitThemes});
+}
+
+export const getKitsLocation = (req, res, next) => {
+    if (kitLocations.length === 0) {
+        for(let k = 0; k < rawKitList.length; k++) {
+            const location = rawKitList[k].Location;
+            if (location === '') {
+                continue;
+            }
+
+            if (!kitLocations.includes(location)) {
+                kitLocations.push(location);
+            }
+        }
+
+        kitLocations.sort();
+    }
+
+    res.json({kitsLocations: kitLocations});
+
 }

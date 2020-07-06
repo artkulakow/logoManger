@@ -2,7 +2,7 @@ import React, {Component, createRef} from 'react';
 import Modal from 'react-modal';
 import {connect} from "react-redux";
 
-import {loadKits, setFetchKits, getKits} from '../../../actions/kits';
+import {loadKits, setFetchKits, getKits , getKitsThemes, getKitsLocations} from '../../../actions/kits';
 
 import MyTable from '../../MyTable/MyTable';
 
@@ -18,6 +18,8 @@ const legoColumns = [
         sortable: true,
         sortType: 'number',
         sortOnLoad: true,
+        filterable: true,
+        filterableType: 'numeric',
     },
     {
         label: "Theme",
@@ -26,14 +28,32 @@ const legoColumns = [
         position: 'center',
         field: 'Theme',
         sortable: true,
+        filterable: true,
+        filterableEnableCaseSensitive: true,
+        filterableType: 'dropdown',
+        filterableDropdownData: [],
     },
     {
         label: "Name",
-        headerStyle: {width:"calc(100% - 400px)"},
-        entryStyle: {width:"calc(100% - 400px)"},
+        headerStyle: {width:"calc(100% - 675px)"},
+        entryStyle: {width:"calc(100% - 659px)"},
         position: 'left',
         field: 'Name',
         sortable: true,
+        filterable: true,
+        filterableType: 'text',
+        filterableEnableCaseSensitive: true,
+        filterableEnableSubstring: true
+    },
+    {
+        label: 'Location',
+        headerStyle: {width: '274px'},
+        entryStyle: {width: '258px'},
+        position: 'left',
+        field: 'Location',
+        filterable: true,
+        filterableType: 'dropdown',
+        filterableDropdownData: [],
     }
 
 ];
@@ -48,7 +68,23 @@ class Kits extends Component {
     }
 
     componentDidMount() {
-        console.log('component did mount')
+        const {kitsThemes, kitsLocations, getKitsThemes, getKitsLocations} = this.props;
+
+        if (kitsThemes.length !== 0 && legoColumns[1].filterableDropdownData.length === 0) {
+            legoColumns[1].filterableDropdownData = [...kitsThemes];
+        }
+
+        if (kitsLocations.length !== 0 && legoColumns[3].filterableDropdownData.length === 0) {
+            legoColumns[3].filterableDropdownData = [...kitsLocations];
+        }
+
+        if (kitsThemes.length === 0) {
+            getKitsThemes();
+        }
+
+        if (kitsLocations.length === 0) {
+            getKitsLocations();
+        }
     }
 
     render() {
@@ -81,6 +117,7 @@ class Kits extends Component {
                     loadingError={kitsError}
                     selectEntry={true}
                     fetchDataFunc={getKits}
+                    displaySearch={true}
                 />
 
                 
@@ -96,6 +133,8 @@ const mapStateToProps = state => {
         selectedKit: state.selectedKit,
         kitsLoading: state.kitsLoading,
         kitsError: state.kitsError,
+        kitsThemes: state.kitsThemes,
+        kitsLocations: state.kitsLocations,
     }
 }
 
@@ -103,7 +142,9 @@ const mapDispatchToProps = dispatch => {
     return {
         loadKits: k => dispatch(loadKits(k)),
         setFetchKits: state => dispatch(setFetchKits(state)),
-        getKits: k => dispatch(getKits(k))
+        getKits: k => dispatch(getKits(k)),
+        getKitsThemes: k => dispatch(getKitsThemes(k)),
+        getKitsLocations: k => dispatch(getKitsLocations(k)),
     }
 }
 

@@ -8,6 +8,12 @@ function configureStore(state = {
     selectedKit: -1,
     kitsLoading: false,
     kitsError: null,
+    kitsThemes: [],
+    kitsThemesLoading: false,
+    kitsThemesError: null,
+    kitsLocations: [],
+    kitsLocationsLoading: false,
+    kitsLocationsError: null,
 })
 {
     return createStore(rootReducer, state, applyMiddleware(thunk));

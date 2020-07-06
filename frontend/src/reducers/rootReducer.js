@@ -1,4 +1,8 @@
-import {KITS, FETCH_KITS, SELECTED_KIT, GET_KITS_START, GET_KITS_SUCCESS, GET_KITS_FAILURE} from '../actions/actionTypes';
+import {KITS, FETCH_KITS, SELECTED_KIT, 
+        GET_KITS_START, GET_KITS_SUCCESS, GET_KITS_FAILURE,
+        GET_KITS_THEMES_START, GET_KITS_THEMES_SUCCESS, GET_KITS_THEMES_FAILURE,
+        GET_KITS_LOCATIONS_START, GET_KITS_LOCATIONS_SUCCESS, GET_KITS_LOCATIONS_FAILURE,
+    } from '../actions/actionTypes';
 import { bindActionCreators } from 'redux';
 
 export default (state, action) => {
@@ -25,7 +29,6 @@ export default (state, action) => {
                 kitsLoading: true,
             }
         case GET_KITS_SUCCESS:
-            console.log(action)
             return {
                 ...state,
                 kitsLoading: false,
@@ -33,11 +36,48 @@ export default (state, action) => {
                 kits: action.kits.data.kits
             }
         case GET_KITS_FAILURE:
-            console.log(action)
             return {
                 ...state,
                 kitsLoading: false,
                 kitsError: action.kitsError,
+            }
+
+        case GET_KITS_THEMES_START:
+            return {
+                ...StaticRange,
+                kitsThemesLoading: true,
+            }
+        case GET_KITS_THEMES_SUCCESS:
+            return {
+                ...state,
+                kitsThemesLoading: false,
+                kitsThemesError: null,
+                kitsThemes: action.kitsThemes.data.kitsThemes
+            }
+        case GET_KITS_THEMES_FAILURE:
+            return {
+                ...state,
+                kitsThemesLoading: false,
+                kitsThemesError: action.kitsThemesError,
+            }
+
+        case GET_KITS_LOCATIONS_START:
+            return {
+                ...StaticRange,
+                kitsLocationsLoading: true,
+            }
+        case GET_KITS_LOCATIONS_SUCCESS:
+            return {
+                ...state,
+                kitsLocationsLoading: false,
+                kitsLocationsError: null,
+                kitsLocations: action.kitsLocations.data.kitsLocations
+            }
+        case GET_KITS_LOCATIONS_FAILURE:
+            return {
+                ...state,
+                kitsLocationsLoading: false,
+                kitsLocationsError: action.kitsLocationsError,
             }
         default:
             return state;

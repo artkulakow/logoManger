@@ -1,5 +1,5 @@
 import  express from 'express';
-import {getKitsList, getKitsThemes, createKit} from '../controllers/kits.js';
+import {getKitsList, getKitsThemes, getKitsLocation, createKit} from '../controllers/kits.js';
 
 const router = express.Router();
 
@@ -20,8 +20,9 @@ router.post('/', function(req, res) {
 // get a kit
 router.get('/:kitId', function(req, res, next) {
     const kitId = req.params.kitId;
+    console.log('kitId: ', isNaN(parseInt(kitId, 10)))
 
-    if (kitId === 'themes') {
+    if (isNaN(parseInt(kitId, 10))) {
         next();
 
         return;
@@ -43,6 +44,11 @@ router.delete('/:kitId', function(req, res) {
 // get themes in loaded kits
 router.get('/themes', (req, res, next) => {
     getKitsThemes(req, res, next);
+})
+
+// get location of kits
+router.get('/locations', (req, res, next) => {
+    getKitsLocation(req, res, next);
 })
 
 export default router;
