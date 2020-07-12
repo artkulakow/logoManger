@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 
 import {setSelectedKit} from '../../actions/kits';
+//import {MyTableSearchBar} from './MyTableSearchBar';
 
 import Loading from '../Loading/Loading';
 
 import '../../css/icons.css';
 import './MyTable.scss';
+import MyTableSearchBar from './MyTableSearchBar';
 
 class MyTable extends Component {
     displayName = "MyTable";
@@ -21,6 +23,10 @@ class MyTable extends Component {
             sortTag: '',
             sortDir: 'ascending', //ascending (default) / descending
             sortType: '',
+            filterTag: '',
+            filterValue: '',
+            filterCaseSensitive : false,
+            filterSubstring: false,
         }
     }
 
@@ -43,16 +49,37 @@ class MyTable extends Component {
         }
     }
 
-    fetchData = (c) => {
+    fetchData = () => {
         const {fetchDataFunc} = this.props;
 
         // fetch the data
-        let parms = '';
-        const {sortTag, sortDir, sortType} = this.state;
+        let parms = [];
+        const {sortTag, sortDir, sortType, filterTag, filterValue, filterCaseSensitive, filterSubstring} = this.state;
         if (sortTag !== '') {
-            parms = encodeURI(`?sortTag=${sortTag}&sortDir=${sortDir}&sortType=${sortType}`);
+            if (sortTag !== '') {
+                parms.push(`sortTag=${sortTag}`);
+                parms.push(`sortDir=${sortDir}`);
+                if (sortType !== '') {
+                    parms.push(`sortType=${sortType}`)
+                }
+            }
+        }
+        if (filterTag !== '' && filterValue !== '') {
+            if (filterValue !== '') {
+                parms.push(`filterTag=${filterTag}`);
+                parms.push(`filterValue=${filterValue}`);
+                if (filterCaseSensitive) {
+                    parms.push(`filterCaseSensitive=true`);
+                }
+                if (filterSubstring) {
+                    parms.push('filterSubstring=true');
+                }
+            }
         }
 
+        parms = encodeURI('/?' + parms.join('&'))
+
+        console.log(parms)
         fetchDataFunc(parms);
     }
 
@@ -79,8 +106,37 @@ class MyTable extends Component {
                 sortType: c.sortType ? c.sortType : '',
             },
             () => {
-                this.fetchData(c);
+                this.fetchData();
             })
+        }
+    }
+
+    doSearch = (searchOptions) => {
+        console.log('doSearch')
+        this.setState({
+            filterTag: searchOptions.field,
+            filterValue: searchOptions.value,
+            filterCaseSensitive: searchOptions.caseSensitive ? searchOptions.caseSensitive : false,
+            filterSubstring: searchOptions.substring ? searchOptions.subString: false,
+        },
+        () => {
+            this.fetchData();
+        })
+    }
+
+
+    renderSearchBar() {
+        const {columns, displaySearch} = this.props;
+
+        if (displaySearch && columns.some(col => col.search)) {
+            return (
+                <div>
+                    <MyTableSearchBar
+                        columns={columns}
+                        search={this.doSearch}
+                    />
+                </div>
+            )
         }
     }
 
@@ -181,14 +237,17 @@ class MyTable extends Component {
         const {tableStyle} = this.props;
 
         return (
-            <div className="myTableDiv" style={tableStyle}>
-                <div className="scrollTable">
-                    {this.renderHeader()}
+            <div>
+                <div className="myTableDiv" style={tableStyle}>
+                    {this.renderSearchBar()}
+                    <div className="scrollTable">
+                        {this.renderHeader()}
 
-                    {this.renderData()}
+                        {this.renderData()}
+                    </div>
+
+                    {this.renderLoading()}
                 </div>
-
-                {this.renderLoading()}
             </div>
         );
     }

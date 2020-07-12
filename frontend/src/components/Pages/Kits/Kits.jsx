@@ -18,8 +18,8 @@ const legoColumns = [
         sortable: true,
         sortType: 'number',
         sortOnLoad: true,
-        filterable: true,
-        filterableType: 'numeric',
+        search: true,
+        searchType: 'numeric',
     },
     {
         label: "Theme",
@@ -28,10 +28,10 @@ const legoColumns = [
         position: 'center',
         field: 'Theme',
         sortable: true,
-        filterable: true,
-        filterableEnableCaseSensitive: true,
-        filterableType: 'dropdown',
-        filterableDropdownData: [],
+        search: true,
+        searchEnableCaseSensitive: true,
+        searchType: 'dropdown',
+        searchDropdownData: [],
     },
     {
         label: "Name",
@@ -40,10 +40,10 @@ const legoColumns = [
         position: 'left',
         field: 'Name',
         sortable: true,
-        filterable: true,
-        filterableType: 'text',
-        filterableEnableCaseSensitive: true,
-        filterableEnableSubstring: true
+        search: true,
+        searchType: 'text',
+        searchEnableCaseSensitive: true,
+        searchEnableSubstring: true
     },
     {
         label: 'Location',
@@ -51,9 +51,9 @@ const legoColumns = [
         entryStyle: {width: '258px'},
         position: 'left',
         field: 'Location',
-        filterable: true,
-        filterableType: 'dropdown',
-        filterableDropdownData: [],
+        search: true,
+        searchType: 'dropdown',
+        searchDropdownData: [],
     }
 
 ];
@@ -70,12 +70,12 @@ class Kits extends Component {
     componentDidMount() {
         const {kitsThemes, kitsLocations, getKitsThemes, getKitsLocations} = this.props;
 
-        if (kitsThemes.length !== 0 && legoColumns[1].filterableDropdownData.length === 0) {
-            legoColumns[1].filterableDropdownData = [...kitsThemes];
+        if (kitsThemes.length !== 0 && legoColumns[1].searchDropdownData.length === 0) {
+            legoColumns[1].searchDropdownData = [...kitsThemes];
         }
 
-        if (kitsLocations.length !== 0 && legoColumns[3].filterableDropdownData.length === 0) {
-            legoColumns[3].filterableDropdownData = [...kitsLocations];
+        if (kitsLocations.length !== 0 && legoColumns[3].searchDropdownData.length === 0) {
+            legoColumns[3].searchDropdownData = [...kitsLocations];
         }
 
         if (kitsThemes.length === 0) {
