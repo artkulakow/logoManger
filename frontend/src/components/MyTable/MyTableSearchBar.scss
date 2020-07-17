@@ -32,13 +32,75 @@
         padding: 5px;
         border: 1px solid #000;
         margin-left: 10px;
-        width: calc(75% - 215px);
 
-        .searchTypeText {
-            width: calc(100% - 20px);
+        &.searchValueTextDiv {
+            width: calc(75% - 215px);
+
+            .searchTypeText {
+                width: calc(100% - 70px);
+                font-size: 16px;
+                border: none;
+                outline: none;
+            }
+
+            .searchFieldMatchCase {
+                font-size: 16px;
+                inline-size: 16px;
+                position: relative;
+                top: 3px;
+                display:inline-block;
+                cursor: pointer;
+                margin-right: 5px;
+                margin-left: 5px;
+                color: #777;
+            }
+
+            .searchFieldMatchWholeWord {
+                font-size: 16px;
+                inline-size: 16px;
+                position: relative;
+                top: 3px;
+                display:inline-block;
+                cursor: pointer;
+                margin-right: 5px;
+                color: #777;
+            }
+
+            .searchFieldEnabled {
+                color: #000;
+                background-color: #add8e6;
+            }
+
+        }
+
+        &.searchValueNumericDiv {
+            width: calc(35% - 215px);
+
+            .searchTypeNumeric {
+                width: calc(100% - 22px);
+                font-size: 16px;
+                border: none;
+                outline: none;
+            }
+        }
+
+        .searchFieldClear {
             font-size: 16px;
-            border: none;
-            outline: none;
+            line-height: 16px;
+            position: relative;
+            top: 3px;
+            display:inline-block;
+            cursor: pointer;
+        }
+    }
+
+    .searchValueDropdown {
+        width: 400px;
+        margin-left: 10px;
+
+        .Dropdown-menu {
+            max-height: 310px;
+            overflow-y: auto;
         }
     }
 
@@ -46,7 +108,8 @@
         margin-left: 10px;
         font-size: 16px;
         padding: 5px 15px;
-        border-radius: 16px;;
+        border-radius: 16px;
+        outline: none;
     }
 
     .selectColumn {

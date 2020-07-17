@@ -55,31 +55,28 @@ class MyTable extends Component {
         // fetch the data
         let parms = [];
         const {sortTag, sortDir, sortType, filterTag, filterValue, filterCaseSensitive, filterSubstring} = this.state;
-        if (sortTag !== '') {
-            if (sortTag !== '') {
-                parms.push(`sortTag=${sortTag}`);
+        if (!!sortTag) {
+            parms.push(`sortTag=${sortTag}`);
+            if (!!sortDir) {
                 parms.push(`sortDir=${sortDir}`);
-                if (sortType !== '') {
-                    parms.push(`sortType=${sortType}`)
-                }
+            }
+            if (!!sortType) {
+                parms.push(`sortType=${sortType}`)
             }
         }
-        if (filterTag !== '' && filterValue !== '') {
-            if (filterValue !== '') {
-                parms.push(`filterTag=${filterTag}`);
-                parms.push(`filterValue=${filterValue}`);
-                if (filterCaseSensitive) {
-                    parms.push(`filterCaseSensitive=true`);
-                }
-                if (filterSubstring) {
-                    parms.push('filterSubstring=true');
-                }
+        if (!!filterTag && !!filterValue) {
+            parms.push(`filterTag=${filterTag}`);
+            parms.push(`filterValue=${filterValue}`);
+            if (filterCaseSensitive !== undefined) {
+                parms.push(`filterCaseSensitive=${filterCaseSensitive}`);
+            }
+            if (filterSubstring !== undefined) {
+                parms.push(`filterSubstring=${!filterSubstring}`);
             }
         }
 
         parms = encodeURI('/?' + parms.join('&'))
 
-        console.log(parms)
         fetchDataFunc(parms);
     }
 
@@ -112,12 +109,12 @@ class MyTable extends Component {
     }
 
     doSearch = (searchOptions) => {
-        console.log('doSearch')
+        console.log('doSearch: ', searchOptions)
         this.setState({
             filterTag: searchOptions.field,
             filterValue: searchOptions.value,
             filterCaseSensitive: searchOptions.caseSensitive ? searchOptions.caseSensitive : false,
-            filterSubstring: searchOptions.substring ? searchOptions.subString: false,
+            filterSubstring: searchOptions.substring ? !searchOptions.subString : false,
         },
         () => {
             this.fetchData();

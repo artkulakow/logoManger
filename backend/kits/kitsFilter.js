@@ -14,15 +14,14 @@ const kitsFilter = (orgKitList, req) => {
     fCaseSensitive = filterCaseSensitive ? (filterCaseSensitive === 'true') : false;
     fSubstring = filterSubstring ? (filterSubstring === 'true'): false;
 
-    console.log(`kitsFilter -> filterTag: ${fTag}, filterValue: ${fValue}, filterCaseSensitive: ${fCaseSensitive}, $filterSubstring: ${fSubstring}`)
+    console.log(`kitsFilter -> filterTag: ${fTag}, filterValue: ${fValue}, filterCaseSensitive: ${fCaseSensitive}, filterSubstring: ${fSubstring}`)
         
     // only do it if there is a filterTag and filterValue
     if (fTag !== '' && fValue !== '') {
-        console.log('filter kits');
-        const val = fCaseSensitive ? fValuetoLowerCase : fValue;
+        const val = fCaseSensitive ? fValue : fValue.toLowerCase();
         kitList = kitList.filter((kit) => {
             if (kit[fTag]) {
-                const listTag = fCaseSensitive ? kit[fTag].toLowerCase : kit[fTag];
+                const listTag = fCaseSensitive ? kit[fTag] : kit[fTag].toLowerCase();
                 
                 if (fSubstring) {
                     return listTag.includes(val)

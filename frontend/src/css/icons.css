@@ -50,9 +50,6 @@
 .icon-arrow-left:before {
   content: "\64";
 }
-.icon-arrow-right:before {
-  content: "\65";
-}
 .icon-arrow-up:before {
   content: "\66";
 }
@@ -466,4 +463,28 @@
 }
 .icon-weak:before {
   content: "\e02f";
+}
+.icon-arrow-right:before {
+  content: "\65";
+}
+.icon-business:before {
+  content: "\e030";
+}
+.icon-real-estate:before {
+  content: "\e031";
+}
+.icon-stocks:before {
+  content: "\e032";
+}
+.icon-flag:before {
+  content: "\e033";
+}
+.icon-persona:before {
+  content: "\e034";
+}
+.icon-type-case:before {
+  content: "\e035";
+}
+.icon-type-edit:before {
+  content: "\e036";
 }

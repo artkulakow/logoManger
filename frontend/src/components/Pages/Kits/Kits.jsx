@@ -1,4 +1,4 @@
-import React, {Component, createRef} from 'react';
+import React, {Component} from 'react';
 import Modal from 'react-modal';
 import {connect} from "react-redux";
 
@@ -61,22 +61,17 @@ const legoColumns = [
 class Kits extends Component {
     displayName = "Kits";
 
-    inputFileRef = createRef();
+    constructor(props) {
+        super(props);
 
-    loadDataHandler = () => {
-        this.inputFileRef.current.click();
+        this.state = {
+            searchDropdownsLoaded: false,
+        }
     }
 
     componentDidMount() {
         const {kitsThemes, kitsLocations, getKitsThemes, getKitsLocations} = this.props;
 
-        if (kitsThemes.length !== 0 && legoColumns[1].searchDropdownData.length === 0) {
-            legoColumns[1].searchDropdownData = [...kitsThemes];
-        }
-
-        if (kitsLocations.length !== 0 && legoColumns[3].searchDropdownData.length === 0) {
-            legoColumns[3].searchDropdownData = [...kitsLocations];
-        }
 
         if (kitsThemes.length === 0) {
             getKitsThemes();
@@ -84,6 +79,27 @@ class Kits extends Component {
 
         if (kitsLocations.length === 0) {
             getKitsLocations();
+        }
+    }
+
+    componentDidUpdate(prevProps) {
+        const {kitsLoading, kitsLocations, kitsThemes} = this.props;
+
+        if (!kitsLocations || !kitsThemes) {
+            return;
+        }
+
+        if (kitsLoading !== undefined && !kitsLoading) {
+            console.log('prevProps: ', prevProps)
+            console.log('props: ', this.props)
+
+            if (kitsThemes.length !== 0 && legoColumns[1].searchDropdownData.length === 0) {
+                legoColumns[1].searchDropdownData = [...kitsThemes];
+            }
+
+            if (kitsLocations.length !== 0 && legoColumns[3].searchDropdownData.length === 0) {
+                legoColumns[3].searchDropdownData = [...kitsLocations];
+            }
         }
     }
 
