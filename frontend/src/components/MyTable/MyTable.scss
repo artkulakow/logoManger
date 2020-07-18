@@ -50,6 +50,13 @@
             overflow-y: auto;
             overflow-x: none;
 
+            .noKits {
+                font-size: 24px;
+                font-weight: bolder;
+                margin-top: 150px;
+                text-align: center;
+            }
+
             .scrollContentInner {
                 width: calc(100% - 16px);
 

@@ -200,6 +200,14 @@ class MyTable extends Component {
             return;
         }
 
+        if (data.length == 0) {
+            return (
+                <div className="scrollContent">
+                    <div className="noKits">No Lego<br></br>Kits Found</div>
+                </div>
+            )
+        }
+
         return (
             <div className="scrollContent">
                 <div className="scrollContentInner">
