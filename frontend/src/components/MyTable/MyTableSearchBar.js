@@ -11,7 +11,7 @@ const MyTableSearchBar = (props) => {
     const [searchColumn, setSearchColumn] = useState({value: -1, label: 'Search Column'});
     const [searchMatchCase, setSearchMatchCase] = useState(false);
     const [searchMatchWholeWord, setSearchMatchWholeWord] = useState(false);
-    const [searchDropdown, setSearchDropdown] = useState({value: -1, label: 'Search Value'});
+    const [searchDropdown, setSearchDropdown] = useState({value: -1, label: 'Search Value', className: 'searchValueDropDown'});
     const searchFieldTextRef = useRef();
 
     let searchInput;
@@ -58,15 +58,16 @@ const MyTableSearchBar = (props) => {
         console.log(`searchType: ${searchType}`)
         if (search) {
             const searchOptions = {};
-            searchOptions.field = searchField;
-            searchOptions.value = searchValue;
+            if ((searchType !== 'dropdown') || (searchType === 'dropdown' && searchDropdown.value !== -1)) {
+                searchOptions.field = searchField;
+                searchOptions.value = searchValue;
 
-            if (searchType === 'text') {
-                searchOptions.caseSensitive = searchMatchCase;
-                searchOptions.substring = searchMatchWholeWord;
+                if (searchType === 'text') {
+                    searchOptions.caseSensitive = searchMatchCase;
+                    searchOptions.substring = searchMatchWholeWord;
+                }
             }
 
-console.log(`searchOptions: `, searchOptions)            
             search(searchOptions);
         }
     }
@@ -115,13 +116,14 @@ console.log(`searchOptions: `, searchOptions)
         else if (type === 'dropdown') {
             const {columns} = props;
             const dropData = columns[searchColumn.value].searchDropdownData;
-            const options = dropData.map((data, index) => {
+            let options = dropData.map((data, index) => {
                 const col = {};
                 col.label = data;
                 col.value = index;
     
                 return col;
-           });
+            });
+            options = [{value: -1, label: 'Search Value', className: 'searchValueDropDown'}, ...options];
         
             return (
                 <Dropdown 

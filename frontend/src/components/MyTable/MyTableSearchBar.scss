@@ -98,6 +98,10 @@
         width: 400px;
         margin-left: 10px;
 
+        .searchValueDropDown {
+            color: #999;
+            font-style: italic;
+        }
         .Dropdown-menu {
             max-height: 310px;
             overflow-y: auto;
