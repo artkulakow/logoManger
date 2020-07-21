@@ -104,6 +104,18 @@ const sendKitsList = (req, res) => {
 
     // sort
     kitList = kitsSort(kitList, req);
+
+    // only send the fields needed
+    kitList = kitList.map((kit) => {
+        const k = {};
+        k.id = kit.id;
+        k["Item Number"] = kit["Item Number"];
+        k["Theme"] = kit["Theme"];
+        k["Name"] = kit["Name"];
+        k["Location"] = kit["Location"];
+
+        return k;
+    })
     
     res.json({kits: kitList});
     // res.statusMessage = "send help!!!"
