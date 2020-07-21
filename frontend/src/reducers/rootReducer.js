@@ -36,6 +36,7 @@ export default (state, action) => {
                 kits: action.kits.data.kits
             }
         case GET_KITS_FAILURE:
+            console.log('reducers => getKits: ', {...action.kitsError})
             return {
                 ...state,
                 kitsLoading: false,

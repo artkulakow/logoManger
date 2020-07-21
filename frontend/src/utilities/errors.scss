@@ -1,0 +1,17 @@
+.apiErrorMsgDiv {
+    padding-top: 50px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+
+    .apiErrorHeading {
+        font-size:24px;
+        font-weight: bold;
+        color: #f00;
+    }
+
+    .apiErrorMsg {
+        margin-top: 10px;
+        font-size: 16px;
+    }
+}

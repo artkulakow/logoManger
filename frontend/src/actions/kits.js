@@ -30,10 +30,14 @@ export const getKits = (params = '') => {
     return (dispatch) => {
         dispatch({type: GET_KITS_START});
 
-        return axios.get('http://localhost:3100/kits' + encodeURI(params)).then(
-            kits => dispatch({type: GET_KITS_SUCCESS, kits}),
-            kitsError => dispatch({type: GET_KITS_FAILURE, kitsError})
-        )
+        return axios.get('http://localhost:3100/kits' + encodeURI(params))
+            .then (
+                kits => dispatch({type: GET_KITS_SUCCESS, kits}),
+            )
+            .catch((kitsError) => {
+                console.log(`getKits: `, {...kitsError});
+                dispatch({type: GET_KITS_FAILURE, kitsError})
+            });
     }
 }
 
@@ -61,8 +65,11 @@ export const getKitsThemes = () => {
 
         return axios.get('http://localhost:3100/kits/themes').then(
             kitsThemes => dispatch({type: GET_KITS_THEMES_SUCCESS, kitsThemes}),
-            kitsThemesError => dispatch({type: GET_KITS_THEMES_FAILURE, kitsThemesError})
         )
+        .catch((kitsError) => {
+            console.log(`getKitsThemes: `, {...kitsError});
+            dispatch({type: GET_KITS_THEMES_FAILURE, kitsError})
+        });
     }
 }
 
@@ -92,6 +99,11 @@ export const getKitsLocations = () => {
             kitsLocations => dispatch({type: GET_KITS_LOCATIONS_SUCCESS, kitsLocations}),
             kitsLocationsError => dispatch({type: GET_KITS_LOCATIONS_FAILURE, kitsLocationsError})
         )
+        .catch((kitsError) => {
+            console.log(`getKitsLocations: `, {...kitsError});
+            dispatch({type: GET_KITS_LOCATIONS_FAILURE, kitsError})
+        });
+
     }
 }
 

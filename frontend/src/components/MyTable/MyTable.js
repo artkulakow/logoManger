@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import {connect} from "react-redux";
 
 import {setSelectedKit} from '../../actions/kits';
-//import {MyTableSearchBar} from './MyTableSearchBar';
+import {formatApiError} from '../../utilities/errors';
 
 import Loading from '../Loading/Loading';
 
@@ -194,13 +194,21 @@ class MyTable extends Component {
     }
 
     renderData() {
-        const {data, loading, selectedKit} = this.props;
+        const {data, loading, selectedKit, loadingError} = this.props;
 
         if (loading) {
             return;
         }
 
-        if (data.length == 0) {
+        if (!!loadingError) {
+            console.log('xxxxx: ', {...loadingError})
+            return (
+                <div className="scrollContent">
+                    <div className="loadingError">{formatApiError(loadingError, "Error fetching List of kits")}</div>
+                </div>
+            )
+        }
+        else if (data.length === 0) {
             return (
                 <div className="scrollContent">
                     <div className="noKits">No Lego<br></br>Kits Found</div>
@@ -240,7 +248,6 @@ class MyTable extends Component {
 
     render() {
         const {tableStyle} = this.props;
-
         return (
             <div>
                 <div className="myTableDiv" style={tableStyle}>

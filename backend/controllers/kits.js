@@ -105,7 +105,9 @@ const sendKitsList = (req, res) => {
     // sort
     kitList = kitsSort(kitList, req);
     
-    res.json({kits: kitList})
+    res.json({kits: kitList});
+    // res.statusMessage = "send help!!!"
+    // res.status(333).send('There seems to be an error').end()
 }
 
 export const getKitsList = (req, res) => {
