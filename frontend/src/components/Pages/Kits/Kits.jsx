@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
-import Modal from 'react-modal';
+import ReactModal from 'react-modal';
 import {connect} from "react-redux";
 
-import {loadKits, setFetchKits, getKits , getKitsThemes, getKitsLocations} from '../../../actions/kits';
+import {loadKits, setFetchKits, getKits , getKitsThemes, getKitsLocations, getKitDetails} from '../../../actions/kits';
 
 import MyTable from '../../MyTable/MyTable';
 
 import './Kits.scss';
+import PopupMenu from '../../../PopupMenu/PopupMenu';
 
 const legoColumns = [
     {
@@ -66,6 +67,10 @@ class Kits extends Component {
 
         this.state = {
             searchDropdownsLoaded: false,
+            showDetailsModal: false,
+
+            xPopupLoc: -1,
+            yPopupLoc: -1,
         }
     }
 
@@ -90,9 +95,6 @@ class Kits extends Component {
         }
 
         if (kitsLoading !== undefined && !kitsLoading) {
-            console.log('prevProps: ', prevProps)
-            console.log('props: ', this.props)
-
             if (kitsThemes.length !== 0 && legoColumns[1].searchDropdownData.length === 0) {
                 legoColumns[1].searchDropdownData = [...kitsThemes];
             }
@@ -103,20 +105,65 @@ class Kits extends Component {
         }
     }
 
+    kitClickHandler = (index, id, event) => {
+console.log('click')  
+        this.setState({
+            xPopupLoc: -1,
+            yPopupLoc: -1,
+        });     
+
+        this.props.getKitDetails(id);
+    }
+
+    kitRightClickHandler = (index, id, event) =>  {
+        console.log('context menu')
+
+        this.setState({
+            xPopupLoc: event.pageX,
+            yPopupLoc: event.pageY,
+        })
+    }
+
+    displayDetailsHandler = (index, id, event) => {
+        console.log(`displayDetailsHandler => index: ${index}, id: ${id}`)
+    }
+
+    renderModal = () => {
+        const {showDetailsModal} = this.state;
+
+        return (
+            <ReactModal
+                isOpen={showDetailsModal}
+            >
+                <div>Hi</div>
+            </ReactModal>
+        )
+    }
+
+    renderPopupMenu = () => {
+        const {xPopupLoc, yPopupLoc} = this.state;
+
+        if (xPopupLoc !== -1) {
+            return (
+                <PopupMenu
+                    xLoc={xPopupLoc}
+                    yLoc={yPopupLoc}
+                />
+            );
+        }
+    }
+
     render() {
         const legoFilters = [];
         const legoSelectActions = [];
 
-        const {kits, kitsLoading, kitsError, selectedKit, getKits} = this.props;
-
-        if (selectedKit !== -1) {
-            console.log("kit selected: ", selectedKit)
-        }
-
-        Modal.setAppElement('body');
+        const {kits, kitsLoading, kitsError, getKits} = this.props;
+        console.log('kits: ', this.props)
 
         return (
             <div className="kits">
+                {this.renderModal()}
+                {this.renderPopupMenu()}
                 <div className="header">
                     <div className="label">
                         Art's Lego Collection
@@ -129,11 +176,14 @@ class Kits extends Component {
                     multiselect={true}
                     selectActions={legoSelectActions}
                     data={kits}
-                    loading={kitsLoading}
+                    loading={kitsLoading === undefined ? false : kitsLoading}
                     loadingError={kitsError}
                     selectEntry={true}
                     fetchDataFunc={getKits}
                     displaySearch={true}
+                    clickHandler={this.kitClickHandler}
+                    rightClickHandler={this.kitRightClickHandler}
+                    doubleClickHandler={this.displayDetailsHandler}
                 />
 
                 
@@ -151,6 +201,9 @@ const mapStateToProps = state => {
         kitsError: state.kitsError,
         kitsThemes: state.kitsThemes,
         kitsLocations: state.kitsLocations,
+        kitDetails: state.kitDetails,
+        kitDetailsError: state.kitDetailsError,
+        kitDetailsLoading: state.kitDetailsLoading,
     }
 }
 
@@ -161,6 +214,7 @@ const mapDispatchToProps = dispatch => {
         getKits: k => dispatch(getKits(k)),
         getKitsThemes: k => dispatch(getKitsThemes(k)),
         getKitsLocations: k => dispatch(getKitsLocations(k)),
+        getKitDetails: k => dispatch(getKitDetails(k))
     }
 }
 

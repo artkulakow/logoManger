@@ -1,5 +1,6 @@
 import {KITS, FETCH_KITS, SELECTED_KIT, 
         GET_KITS_START, GET_KITS_SUCCESS, GET_KITS_FAILURE,
+        GET_KIT_DETAILS_FAILURE, GET_KIT_DETAILS_START, GET_KIT_DETAILS_SUCCESS, KIT_DETAILS, 
         GET_KITS_THEMES_START, GET_KITS_THEMES_SUCCESS, GET_KITS_THEMES_FAILURE,
         GET_KITS_LOCATIONS_START, GET_KITS_LOCATIONS_SUCCESS, GET_KITS_LOCATIONS_FAILURE,
     } from '../actions/actionTypes';
@@ -25,7 +26,7 @@ export default (state, action) => {
 
         case GET_KITS_START:
             return {
-                ...StaticRange,
+                ...state,
                 kitsLoading: true,
             }
         case GET_KITS_SUCCESS:
@@ -43,9 +44,35 @@ export default (state, action) => {
                 kitsError: action.kitsError,
             }
 
+        case KIT_DETAILS:
+            return {
+                ...state,
+                kitsDetails: action.payload,
+            }
+        case GET_KIT_DETAILS_START:
+            return {
+                ...state,
+                kitDetailsLoading: true,
+            }
+        case GET_KIT_DETAILS_SUCCESS:
+            return {
+                ...state,
+                kitDetailsLoading: false,
+                kitDetailsError: null,
+                kitDetails: action.details.data.details
+            }
+        case GET_KIT_DETAILS_FAILURE:
+            console.log('reducers => getKitDetails: ', {...action.kitsError})
+            return {
+                ...state,
+                kitDetiailsLoading: false,
+                kitDetailsError: action.kitErrorError,
+            }
+
+
         case GET_KITS_THEMES_START:
             return {
-                ...StaticRange,
+                ...state,
                 kitsThemesLoading: true,
             }
         case GET_KITS_THEMES_SUCCESS:
@@ -64,7 +91,7 @@ export default (state, action) => {
 
         case GET_KITS_LOCATIONS_START:
             return {
-                ...StaticRange,
+                ...state,
                 kitsLocationsLoading: true,
             }
         case GET_KITS_LOCATIONS_SUCCESS:

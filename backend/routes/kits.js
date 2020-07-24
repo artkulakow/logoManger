@@ -1,5 +1,5 @@
 import  express from 'express';
-import {getKitsList, getKitsThemes, getKitsLocation, createKit} from '../controllers/kits.js';
+import {getKitsList, getKitsThemes, getKitsLocation, getKitDetails, createKit} from '../controllers/kits.js';
 
 const router = express.Router();
 
@@ -19,16 +19,16 @@ router.post('/', function(req, res) {
 
 // get a kit
 router.get('/:kitId', function(req, res, next) {
-    const kitId = req.params.kitId;
-    console.log('kitId: ', isNaN(parseInt(kitId, 10)))
+    let kitId = req.params.kitId;
+    kitId = parseInt(kitId, 10);
 
-    if (isNaN(parseInt(kitId, 10))) {
+    if (isNaN(kitId)) {
         next();
 
         return;
     }
 
-    res.send(`kits - get a kits details --> kitId: ${req.params.kitId}`);
+    getKitDetails(kitId, req, res);
 })
 
 // updata a kit

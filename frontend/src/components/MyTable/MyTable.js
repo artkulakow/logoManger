@@ -80,11 +80,47 @@ class MyTable extends Component {
         fetchDataFunc(parms);
     }
 
-    selectLineHandler(index) {
-        const {setSelectedKit, selectEntry} =  this.props;
+    selectLineHandler(e, index) {
+        const {setSelectedKit, selectEntry, clickHandler, data} =  this.props;
+
+        console.log('click')
+        if (selectEntry) {
+            setSelectedKit(index);
+
+            if (clickHandler) {
+                clickHandler(index, data[index].id, e);
+
+                e.preventDefault();
+                e.stopPropagation();
+            }
+        }
+    }
+
+    onRightClickHandler = (e, index) => {
+        const {setSelectedKit, selectEntry, rightClickHandler, data} =  this.props;
 
         if (selectEntry) {
             setSelectedKit(index);
+
+            if (rightClickHandler) {
+                rightClickHandler(index, data[index].id, e)
+
+                e.preventDefault();
+            }
+        }
+    }
+
+    onDoubleClickLineHandler = (e, index) => {
+        const {setSelectedKit, selectEntry, data, doubleClickHandler} = this.props;
+
+        if (selectEntry) {
+            setSelectedKit(index);
+
+            if (doubleClickHandler) {
+                doubleClickHandler(index, data[index].id, e);
+            }
+            console.log(`double click => index: ${index}, id: ${data[index].id}`)
+            console.log(`double click -> x: ${e.screenX}, y: ${e.screenY}, e: `, {...e})
         }
     }
 
@@ -109,7 +145,6 @@ class MyTable extends Component {
     }
 
     doSearch = (searchOptions) => {
-        console.log('doSearch: ', searchOptions)
         this.setState({
             filterTag: searchOptions.field,
             filterValue: searchOptions.value,
@@ -201,7 +236,6 @@ class MyTable extends Component {
         }
 
         if (!!loadingError) {
-            console.log('xxxxx: ', {...loadingError})
             return (
                 <div className="scrollContent">
                     <div className="loadingError">{formatApiError(loadingError, "Error fetching List of kits")}</div>
@@ -226,7 +260,13 @@ class MyTable extends Component {
                         }
 
                         return (
-                            <div key={index} className={lineStyle} onClick={() => this.selectLineHandler(index)}>
+                            <div 
+                                key={index} 
+                                className={lineStyle} 
+                                onClick={(e) => this.selectLineHandler(e, index)} 
+                                onContextMenu={(e) => this.onRightClickHandler(e, index)}
+                                onDoubleClick={(e) => this.onDoubleClickLineHandler(e, index)}
+                            >
                                 {this.renderEntry(index)}
                             </div>
                         )
@@ -277,6 +317,9 @@ MyTable.propTypes = {
     fetchDataFunc: PropTypes.func,
     loadingError: PropTypes.object,
     displaySearch: PropTypes.bool,
+    clickHandler: PropTypes.func,
+    rightClickHandler: PropTypes.func,
+    doubleClickHandler: PropTypes.func,
 };
 
 MyTable.defaultProps = {
@@ -288,6 +331,9 @@ MyTable.defaultProps = {
     tableStyle: {width: '80%'},
     fetchDataFunc: undefined,
     displaySearch: false,
+    clickHandler: undefined,
+    rightClickHandler: undefined,
+    doubleClickHandler: undefined,
 };
 
 const mapStateToProps = state => {

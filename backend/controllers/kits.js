@@ -135,6 +135,17 @@ export const createKit = (req, res) => {
     console.log('get kits list')
 }
 
+export const getKitDetails = (kitId, req, res) => {
+    const details = rawKitList.find((kit) => kit.id === kitId);
+    if (details === undefined) {
+        res.status(404).end();
+        res.statusMessage = "Kit Not Found";
+    }
+    else {
+        res.json({details: details});
+    }
+}
+
 export const getKitsThemes = (req, res, next) => {
     if (kitThemes.length === 0) {
         for(let k = 0; k < rawKitList.length; k++) {

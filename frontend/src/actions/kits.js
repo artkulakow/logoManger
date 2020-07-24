@@ -1,5 +1,6 @@
 import {KITS, FETCH_KITS, SELECTED_KIT, 
         GET_KITS_START, GET_KITS_SUCCESS, GET_KITS_FAILURE,
+        GET_KIT_DETAILS_START, GET_KIT_DETAILS_SUCCESS, GET_KIT_DETAILS_FAILURE,
         GET_KITS_THEMES_START, GET_KITS_THEMES_SUCCESS, GET_KITS_THEMES_FAILURE,
         GET_KITS_LOCATIONS_START, GET_KITS_LOCATIONS_SUCCESS, GET_KITS_LOCATIONS_FAILURE,
     } from './actionTypes.js'
@@ -35,7 +36,7 @@ export const getKits = (params = '') => {
                 kits => dispatch({type: GET_KITS_SUCCESS, kits}),
             )
             .catch((kitsError) => {
-                console.log(`getKits: `, {...kitsError});
+                console.error(`getKits: `, {...kitsError});
                 dispatch({type: GET_KITS_FAILURE, kitsError})
             });
     }
@@ -58,6 +59,43 @@ export const getKitsFailure = error => ({
         error
     }
 })
+
+export const getKitDetails = (kitId = -1) => {
+    console.log('getKitDetails: ', kitId)
+    return (dispatch) => {
+        dispatch({type: GET_KIT_DETAILS_START});
+
+        return axios.get('http://localhost:3100/kits/' + kitId)
+            .then (
+                details => {
+                    dispatch({type: GET_KIT_DETAILS_SUCCESS, details})
+                },
+            )
+            .catch((kitDetailsError) => {
+                console.error(`getKitDetails: `, {...kitDetailsError});
+                dispatch({type: GET_KIT_DETAILS_FAILURE, kitDetailsError})
+            });
+    }
+}
+
+export const getKitDetailsStart = () => ({
+    type: GET_KIT_DETAILS_START
+})
+
+export const getKitDetailsSuccess = details => ({
+    type: GET_KIT_DETAILS_SUCCESS,
+    payload: {
+        ...details
+    }
+})
+
+export const getKitDetailsFailure = error => ({
+    type: GET_KIT_DETAILS_FAILURE,
+    payload: {
+        error
+    }
+})
+
 
 export const getKitsThemes = () => {
     return (dispatch) => {
