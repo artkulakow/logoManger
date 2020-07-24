@@ -1,5 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ReactReduxContext } from "react-redux";
+
+import './PopupMenu.scss';
+import '../css/icons.css';
+
 
 const PopupMenu = (props) => {
     const [clickedOutside, setClickedOutside] = useState(false);
@@ -14,7 +17,9 @@ const PopupMenu = (props) => {
         }
     };
 
-    const handleClickInside = () => setClickedOutside(false);
+    const handleClickInside = () => {
+        setClickedOutside(true);
+    }
 
     useEffect(() => {
         document.addEventListener("mousedown", handleClickOutside);
@@ -22,16 +27,10 @@ const PopupMenu = (props) => {
         return () => document.removeEventListener("mousedown", handleClickOutside);
     });
 
-    console.log('xxxxxxx')
-
     const {xLoc, yLoc} = props;
     const popupStyle = {
-        position: 'absolute',
         left: xLoc + 'px',
         top: yLoc + 'px',
-        width: '100px',
-        height: '100px',
-        backgroundColor: 'green',
         display: 'block',
     };
 
@@ -41,8 +40,44 @@ const PopupMenu = (props) => {
         return null;
     }
 
+    const handleClickMenuItem = (itemId) => {
+        if (props.onSelect) {
+            props.onSelect(itemId);
+        }
+
+        handleClickInside();
+    }
+
+    const menuEntries = (menu) => {
+        if (menu === undefined || menu.length === 0) {
+            return (
+                <div className="noMenus">No Menus Defined</div>
+            );
+        }
+
+        return (
+            <div className="popMenuFrame">
+                {menu.map((item, index) => {
+                    const iconClass = 'icon ' + item.fontIcon;
+
+                    return (
+                        <div className="menuItem" onClick={() => {handleClickMenuItem(item.id)}}
+                            key={index} 
+                        >
+                            <div className={iconClass}/>
+                            {item.label}
+                        </div>
+                    )
+
+                })}
+            </div>
+        )
+    }
+
     return (
-        <div ref={myRef} className="popupMenu" style={popupStyle} onClick={handleClickInside}></div>
+        <div ref={myRef} className="popupMenu" style={popupStyle}>
+            {menuEntries(props.menu)}
+        </div>
   );
 };
 

@@ -96,14 +96,14 @@ class MyTable extends Component {
         }
     }
 
-    onRightClickHandler = (e, index) => {
-        const {setSelectedKit, selectEntry, rightClickHandler, data} =  this.props;
+    onContextMenuHandler = (e, index) => {
+        const {setSelectedKit, selectEntry, contextMenuHandler, data} =  this.props;
 
         if (selectEntry) {
             setSelectedKit(index);
 
-            if (rightClickHandler) {
-                rightClickHandler(index, data[index].id, e)
+            if (contextMenuHandler) {
+                contextMenuHandler(index, data[index].id, e)
 
                 e.preventDefault();
             }
@@ -264,7 +264,7 @@ class MyTable extends Component {
                                 key={index} 
                                 className={lineStyle} 
                                 onClick={(e) => this.selectLineHandler(e, index)} 
-                                onContextMenu={(e) => this.onRightClickHandler(e, index)}
+                                onContextMenu={(e) => this.onContextMenuHandler(e, index)}
                                 onDoubleClick={(e) => this.onDoubleClickLineHandler(e, index)}
                             >
                                 {this.renderEntry(index)}
@@ -318,7 +318,7 @@ MyTable.propTypes = {
     loadingError: PropTypes.object,
     displaySearch: PropTypes.bool,
     clickHandler: PropTypes.func,
-    rightClickHandler: PropTypes.func,
+    contextMenuHandler: PropTypes.func,
     doubleClickHandler: PropTypes.func,
 };
 
@@ -332,7 +332,7 @@ MyTable.defaultProps = {
     fetchDataFunc: undefined,
     displaySearch: false,
     clickHandler: undefined,
-    rightClickHandler: undefined,
+    contextMenuHandler: undefined,
     doubleClickHandler: undefined,
 };
 

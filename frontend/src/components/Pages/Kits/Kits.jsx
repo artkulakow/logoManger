@@ -62,6 +62,24 @@ const legoColumns = [
 class Kits extends Component {
     displayName = "Kits";
 
+    kitsContextMenu = [
+        {
+            id: 'details',
+            label: 'Details',
+            fontIcon: 'icon-more-details',
+        },
+        {
+            id: 'modify',
+            label: 'Modify',
+            fontIcon: 'icon-edit-contact',
+        },
+        {
+            id: 'delete',
+            label: 'Delete',
+            fontIcon: 'icon-delete-circle',
+        }
+    ]
+
     constructor(props) {
         super(props);
 
@@ -106,7 +124,6 @@ class Kits extends Component {
     }
 
     kitClickHandler = (index, id, event) => {
-console.log('click')  
         this.setState({
             xPopupLoc: -1,
             yPopupLoc: -1,
@@ -115,13 +132,15 @@ console.log('click')
         this.props.getKitDetails(id);
     }
 
-    kitRightClickHandler = (index, id, event) =>  {
-        console.log('context menu')
-
+    kitContextMenuHandler = (index, id, event) =>  {
         this.setState({
             xPopupLoc: event.pageX,
             yPopupLoc: event.pageY,
         })
+    }
+
+    kitsContextMenuSelectHandler = (menuId) => {
+        console.log(`kitsContextMenuSelectHandler: ${menuId}`)
     }
 
     displayDetailsHandler = (index, id, event) => {
@@ -148,6 +167,8 @@ console.log('click')
                 <PopupMenu
                     xLoc={xPopupLoc}
                     yLoc={yPopupLoc}
+                    menu={this.kitsContextMenu}
+                    onSelect={this.kitsContextMenuSelectHandler}
                 />
             );
         }
@@ -158,7 +179,6 @@ console.log('click')
         const legoSelectActions = [];
 
         const {kits, kitsLoading, kitsError, getKits} = this.props;
-        console.log('kits: ', this.props)
 
         return (
             <div className="kits">
@@ -182,7 +202,7 @@ console.log('click')
                     fetchDataFunc={getKits}
                     displaySearch={true}
                     clickHandler={this.kitClickHandler}
-                    rightClickHandler={this.kitRightClickHandler}
+                    contextMenuHandler={this.kitContextMenuHandler}
                     doubleClickHandler={this.displayDetailsHandler}
                 />
 

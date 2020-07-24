@@ -1,0 +1,28 @@
+.popupMenu {
+    position: absolute;
+    min-width: 75px;
+    font-size: 14px;
+    line-height: 20px;
+    min-height: 20px;
+    background-color: #f0f3f5;
+    border: 1px solid #32363f;
+    border-radius: 3px;
+
+    .menuItem {
+        padding: 2px 5px;
+
+        &:hover {
+            background-color: #1d6fdc;
+            color: #fff
+        }
+
+        .icon {
+            display: inline-block;
+            margin-right: 5px;
+            font-size: 15px;
+            line-height: 1;
+            position: relative;
+            top: 3px;
+        }
+    }
+}
