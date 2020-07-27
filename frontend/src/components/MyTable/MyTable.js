@@ -83,9 +83,8 @@ class MyTable extends Component {
     selectLineHandler(e, index) {
         const {setSelectedKit, selectEntry, clickHandler, data} =  this.props;
 
-        console.log('click')
         if (selectEntry) {
-            setSelectedKit(index);
+            setSelectedKit(data[index].id);
 
             if (clickHandler) {
                 clickHandler(index, data[index].id, e);
@@ -100,7 +99,7 @@ class MyTable extends Component {
         const {setSelectedKit, selectEntry, contextMenuHandler, data} =  this.props;
 
         if (selectEntry) {
-            setSelectedKit(index);
+            setSelectedKit(data[index].id);
 
             if (contextMenuHandler) {
                 contextMenuHandler(index, data[index].id, e)
@@ -114,13 +113,11 @@ class MyTable extends Component {
         const {setSelectedKit, selectEntry, data, doubleClickHandler} = this.props;
 
         if (selectEntry) {
-            setSelectedKit(index);
+            setSelectedKit(data[index].id);
 
             if (doubleClickHandler) {
                 doubleClickHandler(index, data[index].id, e);
             }
-            console.log(`double click => index: ${index}, id: ${data[index].id}`)
-            console.log(`double click -> x: ${e.screenX}, y: ${e.screenY}, e: `, {...e})
         }
     }
 
@@ -170,6 +167,34 @@ class MyTable extends Component {
                 </div>
             )
         }
+    }
+
+    renderToolbar = () => {
+        const {toolbar, toolbarHandler, selectedKit} = this.props;
+
+        if (toolbar === undefined) {
+            return;
+        }
+
+        return (
+            <div className="toolbarDiv">
+                <div className="toolbarIconDiv">
+                    {toolbar.map((tool, index) => {
+                        let onClickHandler = () => toolbarHandler(tool.id);
+                        let iconClassName = 'icon ' + tool.fontIcon;
+                        if (selectedKit == -1) {
+                            iconClassName += ' notSelected';
+                            onClickHandler = null;
+                        }
+
+                        return (
+                            <div key={index} className={iconClassName} title={tool.tooltip} onClick={onClickHandler}></div>
+                        )
+                    })}
+
+                </div>
+            </div>
+        )
     }
 
     renderHeader() {
@@ -255,7 +280,7 @@ class MyTable extends Component {
                 <div className="scrollContentInner">
                     {data.map((d, index) => {
                         let lineStyle = index % 2 === 0 ? 'contentLine alternateRow' : 'contentLine normalRow';
-                        if (index === selectedKit) {
+                        if (data[index].id === selectedKit) {
                             lineStyle = lineStyle + ' selected';
                         }
 
@@ -292,6 +317,7 @@ class MyTable extends Component {
             <div>
                 <div className="myTableDiv" style={tableStyle}>
                     {this.renderSearchBar()}
+                    {this.renderToolbar()}
                     <div className="scrollTable">
                         {this.renderHeader()}
 
@@ -320,6 +346,8 @@ MyTable.propTypes = {
     clickHandler: PropTypes.func,
     contextMenuHandler: PropTypes.func,
     doubleClickHandler: PropTypes.func,
+    toolbar: PropTypes.object,
+    toolbarHandler: PropTypes.func,
 };
 
 MyTable.defaultProps = {
@@ -334,6 +362,8 @@ MyTable.defaultProps = {
     clickHandler: undefined,
     contextMenuHandler: undefined,
     doubleClickHandler: undefined,
+    toolbar: undefined,
+    toolbarHandler: undefined,
 };
 
 const mapStateToProps = state => {

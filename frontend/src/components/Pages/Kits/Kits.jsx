@@ -66,16 +66,19 @@ class Kits extends Component {
         {
             id: 'details',
             label: 'Details',
+            tooltip: 'Display Kit Details',
             fontIcon: 'icon-more-details',
         },
         {
             id: 'modify',
             label: 'Modify',
+            tooltip: 'Modifiy Selected Kit',
             fontIcon: 'icon-edit-contact',
         },
         {
             id: 'delete',
             label: 'Delete',
+            tooltip: 'Delete Selected Kit',
             fontIcon: 'icon-delete-circle',
         }
     ]
@@ -143,8 +146,8 @@ class Kits extends Component {
         console.log(`kitsContextMenuSelectHandler: ${menuId}`)
     }
 
-    displayDetailsHandler = (index, id, event) => {
-        console.log(`displayDetailsHandler => index: ${index}, id: ${id}`)
+    kitDoubleClickHandler = (index, id, event) => {
+        console.log(`kitDoubleClickHandler => index: ${index}, id: ${id}`)
     }
 
     renderModal = () => {
@@ -201,9 +204,11 @@ class Kits extends Component {
                     selectEntry={true}
                     fetchDataFunc={getKits}
                     displaySearch={true}
+                    toolbar={this.kitsContextMenu}
+                    toolbarHandler={this.kitsContextMenuSelectHandler}
                     clickHandler={this.kitClickHandler}
                     contextMenuHandler={this.kitContextMenuHandler}
-                    doubleClickHandler={this.displayDetailsHandler}
+                    doubleClickHandler={this.kitDoubleClickHandler}
                 />
 
                 
