@@ -6,8 +6,10 @@ import {loadKits, setFetchKits, getKits , getKitsThemes, getKitsLocations, getKi
 
 import MyTable from '../../MyTable/MyTable';
 
-import './Kits.scss';
 import PopupMenu from '../../../PopupMenu/PopupMenu';
+import Loading from '../../Loading/Loading';
+
+import './Kits.scss';
 
 const legoColumns = [
     {
@@ -88,10 +90,13 @@ class Kits extends Component {
 
         this.state = {
             searchDropdownsLoaded: false,
-            showDetailsModal: false,
 
             xPopupLoc: -1,
             yPopupLoc: -1,
+
+            displayDetails: false,
+            displayModify: false,
+            displayDelete: false,
         }
     }
 
@@ -131,8 +136,6 @@ class Kits extends Component {
             xPopupLoc: -1,
             yPopupLoc: -1,
         });     
-
-        this.props.getKitDetails(id);
     }
 
     kitContextMenuHandler = (index, id, event) =>  {
@@ -143,21 +146,145 @@ class Kits extends Component {
     }
 
     kitsContextMenuSelectHandler = (menuId) => {
+        const {selectedKit, getKitDetails} = this.props;
+
         console.log(`kitsContextMenuSelectHandler: ${menuId}`)
+        switch (menuId) {
+            case 'details':
+                console.log(`details: ${selectedKit}`);
+
+                // get the details;
+                getKitDetails(selectedKit);
+
+                this.setState({
+                    xPopupLoc: -1,
+                    yPopupLoc: -1,
+                    displayDetails: true,
+                });
+                break;
+            case 'modify':
+                console.log(`modify: ${selectedKit}`);
+                this.setState({
+                    displayModify: true,
+                    xPopupLoc: -1,
+                    yPopupLoc: -1,
+                });
+                break;
+            case 'delete':
+                console.log(`delete: ${selectedKit}`);
+                this.setState({
+                    displayDelete: true,
+                    xPopupLoc: -1,
+                    yPopupLoc: -1,
+                });
+                break;
+        }
     }
 
     kitDoubleClickHandler = (index, id, event) => {
-        console.log(`kitDoubleClickHandler => index: ${index}, id: ${id}`)
+        const {selectedKit, getKitDetails} = this.props;
+
+        getKitDetails(selectedKit);
+
+        this.setState({displayDetails: true,});
     }
 
-    renderModal = () => {
-        const {showDetailsModal} = this.state;
+    closeModalHandler = () => {
+        this.setState(
+            {
+
+                displayDelete: false,
+                displayDetails: false,
+                displayModify: false,
+            }
+        )
+    }
+
+    renderDisplayModalDetails = () => {
+        const {displayDetails, displayModify, displayDelete} = this.state;
+        const {kitDetailsLoading, kitDetails} = this.props;
+
+        console.log('kitDetails: ', kitDetails)
+        console.log(`kitDetailsLoading: ${kitDetailsLoading}`)
+
+        let modalHeader = 'The Header';
+        let modalContent = (<div>The Content</div>);
+        let modalButtons = (<button className="modalBtn" onClick={this.closeModalHandler}>Close</button>);
+        if (displayDetails) {
+            if (kitDetailsLoading) {
+                modalContent = (<Loading/>)
+            }
+            else {
+                const theme = kitDetails["Theme"] === '' ? '--' : kitDetails["Theme"];
+                const name = kitDetails["Name"] === '' ? '--' : kitDetails["Name"];
+                const built = kitDetails["built"] ? 'True' : 'False';
+                modalContent = (
+                    <div>
+                        <div className="contentLine">
+                            <div className="contentEntry itemNumber">
+                                <div className="entryLabel">Kit Number</div>
+                                <div className="entryValue">{kitDetails["Item Number"]}</div>
+                            </div>
+
+                            <div className="contentEntry theme">
+                                <div className="entryLabel">Theme</div>
+                                <div className="entryValue">{theme}</div>
+                            </div>
+                        </div>
+                        <div className="contentLine">
+                            <div className="contentEntry name">
+                                <div className="entryLabel">Name</div>
+                                <div className="entryValue">{name}</div>
+                            </div>
+                        </div>
+                        <div className="contentLine">
+                            <div className="contentEntry location">
+                                <div className="entryLabel">Location</div>
+                                <div className="entryValue">{kitDetails["Location"]}</div>
+                            </div>
+                            <div className="contentEntry quality">
+                                <div className="entryLabel">Quality</div>
+                                <div className="entryValue">{kitDetails["Quality"]}</div>
+                            </div>
+                            <div className="contentEntry built">
+                                <div className="entryLabel">Built</div>
+                                <div className="entryValue">{built}</div>
+                            </div>
+                        </div>
+                        <div className="contentLine">
+                            <div className="contentEntry notes">
+                                <div className="entryLabel">Notes</div>
+                                <div className="entryValue multiline">{kitDetails["Notes"]}</div>
+                            </div>
+                        </div>
+                    </div>
+                )
+            }
+        }
 
         return (
             <ReactModal
-                isOpen={showDetailsModal}
+                isOpen={displayDetails || displayModify || displayDelete}
+                contentLabel="Kit Details"
+                className="modalDialog detailsDialog"
+                overlanClassName='modalOverlay'
+                xonRequestClose={this.closeModalHandler}
             >
-                <div>Hi</div>
+                <div className="kitsModals">
+                    <div className="modalHeaderDiv">
+                        {modalHeader}
+                    </div>
+                    <hr></hr>
+                    <div className="modalContentDiv">
+                        {modalContent}
+                    </div>
+
+                    <div className="modalBtnDiv">
+                        <div className="btnRightDiv">
+                            {modalButtons}
+                        </div>
+                    </div>
+                </div>
             </ReactModal>
         )
     }
@@ -185,7 +312,7 @@ class Kits extends Component {
 
         return (
             <div className="kits">
-                {this.renderModal()}
+                {this.renderDisplayModalDetails()}
                 {this.renderPopupMenu()}
                 <div className="header">
                     <div className="label">

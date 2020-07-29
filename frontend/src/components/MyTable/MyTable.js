@@ -182,7 +182,7 @@ class MyTable extends Component {
                     {toolbar.map((tool, index) => {
                         let onClickHandler = () => toolbarHandler(tool.id);
                         let iconClassName = 'icon ' + tool.fontIcon;
-                        if (selectedKit == -1) {
+                        if (selectedKit === -1) {
                             iconClassName += ' notSelected';
                             onClickHandler = null;
                         }
@@ -346,7 +346,7 @@ MyTable.propTypes = {
     clickHandler: PropTypes.func,
     contextMenuHandler: PropTypes.func,
     doubleClickHandler: PropTypes.func,
-    toolbar: PropTypes.object,
+    toolbar: PropTypes.array,
     toolbarHandler: PropTypes.func,
 };
 

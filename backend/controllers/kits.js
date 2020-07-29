@@ -82,7 +82,7 @@ const loadKits = (req, res) => {
         rawKitListLoadedAt = new Date();
 
         // process the data
-        sendKitsList(req, res);
+        sendKitsList(req, res);       
 
         // cache the file
         const jsonString = JSON.stringify(rawKitList);

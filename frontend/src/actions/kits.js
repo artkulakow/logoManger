@@ -61,7 +61,6 @@ export const getKitsFailure = error => ({
 })
 
 export const getKitDetails = (kitId = -1) => {
-    console.log('getKitDetails: ', kitId)
     return (dispatch) => {
         dispatch({type: GET_KIT_DETAILS_START});
 

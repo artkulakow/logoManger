@@ -49,3 +49,112 @@
     border-top: solid 7px #000; 
     border-bottom-width: 0;
 }
+
+
+.modalDialog {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: block;
+    min-width: 20em;
+    max-width: 70%;
+    background-color: #fff;
+    border-radius: 5px;
+    border: 1px solid #000;
+    transform: translate(-50%, -50%);
+    outline: transparent; 
+    font-size: 16px;
+
+    .modalHeaderDiv {
+        font-size: 24px;
+        line-height: 1;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-weight: bold;
+        padding-left: 10px;
+        background-color: #d1d1d1;
+    }
+
+    hr {
+        margin: 0;
+    }
+
+    .modalContentDiv {
+        padding: 5px 10px 10px 10px;
+
+        .contentLine {
+            width: 100%;
+            min-width: 400px;
+
+            .contentEntry {
+                display: inline-block;
+
+                .entryLabel {
+                    font-size: 13px;
+                    line-height: 1;
+                    font-weight: normal;
+                    color: #32363f;
+                    margin-bottom: 2px;
+                }
+
+                .entryValue {
+                    font-size: 16px;
+                    line-height: 1.1;
+                    font-weight: normal;
+                    color: #000;
+                }
+            
+                &:not(:first-child) {
+                    margin-top: 10px;
+                }
+
+                &:first-child {
+                    margin-top: 5px;
+                }
+            }
+        }
+    }
+
+    .modalBtnDiv {
+        padding: 10px;
+
+        .btnRightDiv {
+            text-align: right;
+        }
+    }
+
+    &.detailsDialog {
+        .itemNumber {
+            width: 70px;
+            padding-right: 10px;
+        }
+
+        .theme {
+            width: calc(100% - 80px);
+        }
+
+        .location {
+            width: 200px;
+            padding-right: 10px;
+        }
+
+        .quality {
+            width: 45px;
+            padding-right: 10px;
+
+        }
+
+        .built {
+            width: 50px;
+        }
+    }
+}
+
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0,0,0,.4);
+}
