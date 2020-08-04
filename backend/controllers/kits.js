@@ -306,7 +306,7 @@ const loadkitInfoRebrickable = () => {
         const infoFile = __dirname + '/' + cacheDirectory + kitInfoRebrickableCache[i];
         console.log(`kitInfoRebrickableFile: ${infoFile}`)
         if (fs.existsSync(infoFile)) {
-            console.log(`Loading cache kit info file ${infoFile}`);
+            console.log(`2 - Loading cache kit info file ${infoFile}`);
             fs.readFile(infoFile, (err, cacheData) => {
                 if (err) {
                     console.error(`Unable to read cache file: ${infoFile}`);
@@ -328,6 +328,8 @@ const loadkitInfoRebrickable = () => {
         }
     }
 
+    console.log('1 - kitInfoRebrickableSets: ', kitInfoRebrickableSets)
+
     if (infoFound) {
         kitInfoRebrickableLoadedAt = new Date();
         
@@ -337,7 +339,8 @@ const loadkitInfoRebrickable = () => {
     const promInfo = [];
     for (let i = 0; i < kitInfoRebrickable.length; i++) {
         console.log(`loading info file: ${kitInfoRebrickable[i]}`)
-        promInfo.push(new Promise((resolve, reject) => {kitInfoRebriclableDirectory + kitInfoRibrickable[i];
+        promInfo.push(new Promise((resolve, reject) => {
+            const fileName = __dirname + '/' + kitInfoRebrickableDirectory + kitInfoRebrickable[i];
             let kitInfoRebrickableId = 1;
             console.log(`Loading fresh kit info file: ${fileName}`)
             fs.readFile(fileName, 'utf-8', (err, data) => {
@@ -357,7 +360,7 @@ const loadkitInfoRebrickable = () => {
                             s.id = kitInfoRebrickableId++;
                             s.setNumber = parseInt(row.set_num.slice(0, -2), 10);
                             s.name = row.name;
-                            s.year = parsetInt(row.year, 10);
+                            s.year = parseInt(row.year, 10);
                             s.themeId = parseInt(row.theme_id, 10);
                             s.numberParts = parseInt(row.num_parts, 10);
 
@@ -370,12 +373,15 @@ const loadkitInfoRebrickable = () => {
             })
         }))
     }
+
+    console.log('2s - kitInfoRebrickableSets: ', kitInfoRebrickableSets)
+
     
     Promise.all(promInfo).then(result => {
-        kitInfoReLoadedAt = new Date();
+        kitInfoRebrickableLoadedAt = new Date();
 
         // kitInfoRebrickableSets
-        let infoFile = __dirname + '/' + cacheDirectory + 'sets.json';
+        let infoFile = __dirname + '/' + cacheDirectory + 'setsRebrickable.json';
         let jsonString = JSON.stringify(kitInfoRebrickableSets);
         fs.writeFile(infoFile, jsonString, err => {
             if (err) {
@@ -448,9 +454,8 @@ export const getKitDetails = (kitId, req, res) => {
         if (set !== undefined) {
             cat = kitInfoBlicklinkCategories.find((c) => c.categoryId === set.categoryId);
         }
-        console.log('set: ', set)
-        console.log('cat: ', cat)
-        console.log('details: ', details)
+
+        const setRebrickable = kitInfoRebrickableSets.find((s) => s.setNumber === kitNum);
 
         const d = {};
         d.itemNumber = parseInt(details['Item Number'], 10);
@@ -477,10 +482,16 @@ export const getKitDetails = (kitId, req, res) => {
             d.shortCategoryName = cat.categoryName;
         }
 
+        if (setRebrickable !== undefined) {
+            d.numberParts = setRebrickable.numberParts;
+
+            if (d.yearRelease === undefined) {
+                d.yearRelease = setRebrickable.year;
+            }
+        }
+
         console.log('d: ',d)
-
-
-        res.json({details: details});
+        res.json({details: d});
     }
 }
 
