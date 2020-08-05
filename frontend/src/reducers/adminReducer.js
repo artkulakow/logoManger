@@ -1,5 +1,4 @@
 import {ADMIN_UNITS} from '../actions/actionTypes';
-import { bindActionCreators } from 'redux';
 
 export default function admin(state = {}, action) {
     switch (action.type) {

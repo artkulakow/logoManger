@@ -4,7 +4,6 @@ import {KITS, FETCH_KITS, SELECTED_KIT,
         GET_KITS_THEMES_START, GET_KITS_THEMES_SUCCESS, GET_KITS_THEMES_FAILURE,
         GET_KITS_LOCATIONS_START, GET_KITS_LOCATIONS_SUCCESS, GET_KITS_LOCATIONS_FAILURE,
     } from '../actions/actionTypes';
-import { bindActionCreators } from 'redux';
 
 export default function kits(state = {}, action) {
     switch (action.type) {

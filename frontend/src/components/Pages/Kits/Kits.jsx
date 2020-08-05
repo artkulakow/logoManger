@@ -178,6 +178,8 @@ class Kits extends Component {
                     yPopupLoc: -1,
                 });
                 break;
+            default:
+                console.error(`Unknown context menu type: ${menuId}`)
         }
     }
 
