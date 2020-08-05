@@ -104,11 +104,11 @@ class Kits extends Component {
         const {kitsThemes, kitsLocations, getKitsThemes, getKitsLocations} = this.props;
 
 
-        if (kitsThemes.length === 0) {
+        if (kitsThemes !== undefined && kitsThemes.length === 0) {
             getKitsThemes();
         }
 
-        if (kitsLocations.length === 0) {
+        if (kitsLocations !== undefined && kitsLocations.length === 0) {
             getKitsLocations();
         }
     }
@@ -391,16 +391,16 @@ class Kits extends Component {
 
 const mapStateToProps = state => {
     return {
-        kits: state.kits,
-        fetchKits: state.fetchKits,
-        selectedKit: state.selectedKit,
-        kitsLoading: state.kitsLoading,
-        kitsError: state.kitsError,
-        kitsThemes: state.kitsThemes,
-        kitsLocations: state.kitsLocations,
-        kitDetails: state.kitDetails,
-        kitDetailsError: state.kitDetailsError,
-        kitDetailsLoading: state.kitDetailsLoading,
+        kits: state.kits.kits,
+        fetchKits: state.kits.fetchKits,
+        selectedKit: state.kits.selectedKit,
+        kitsLoading: state.kits.kitsLoading,
+        kitsError: state.kits.kitsError,
+        kitsThemes: state.kits.kitsThemes,
+        kitsLocations: state.kits.kitsLocations,
+        kitDetails: state.kits.kitDetails,
+        kitDetailsError: state.kits.kitDetailsError,
+        kitDetailsLoading: state.kits.kitDetailsLoading,
     }
 }
 

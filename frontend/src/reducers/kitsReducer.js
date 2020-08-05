@@ -6,9 +6,10 @@ import {KITS, FETCH_KITS, SELECTED_KIT,
     } from '../actions/actionTypes';
 import { bindActionCreators } from 'redux';
 
-export default (state, action) => {
+export default function kits(state = {}, action) {
     switch (action.type) {
         case KITS:
+            console.log('KITS: ', action)
             return {
                 ...state,
                 kits: action.payload,
@@ -108,6 +109,6 @@ export default (state, action) => {
                 kitsLocationsError: action.kitsLocationsError,
             }
         default:
-            return state;
+            return state
     }
 }

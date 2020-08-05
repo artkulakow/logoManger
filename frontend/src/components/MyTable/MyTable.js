@@ -368,7 +368,7 @@ MyTable.defaultProps = {
 
 const mapStateToProps = state => {
     return {
-        selectedKit: state.selectedKit,
+        selectedKit: state.kits.selectedKit,
         fetchKits: state.fetchKits,
     }
 }
