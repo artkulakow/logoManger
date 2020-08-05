@@ -328,8 +328,6 @@ const loadkitInfoRebrickable = () => {
         }
     }
 
-    console.log('1 - kitInfoRebrickableSets: ', kitInfoRebrickableSets)
-
     if (infoFound) {
         kitInfoRebrickableLoadedAt = new Date();
         
@@ -373,9 +371,6 @@ const loadkitInfoRebrickable = () => {
             })
         }))
     }
-
-    console.log('2s - kitInfoRebrickableSets: ', kitInfoRebrickableSets)
-
     
     Promise.all(promInfo).then(result => {
         kitInfoRebrickableLoadedAt = new Date();
@@ -457,13 +452,14 @@ export const getKitDetails = (kitId, req, res) => {
 
         const setRebrickable = kitInfoRebrickableSets.find((s) => s.setNumber === kitNum);
 
-        const d = {};
+        const d = {};       
         d.itemNumber = parseInt(details['Item Number'], 10);
         d.quality = parseInt(details['Quality'], 10);
         d.theme = details['Theme'];
         d.name = details['Name'];
         d.location = details['Location'];
         d.notes = details['Notes'];
+        d.built = details['built'];
 
         if (set !== undefined) {
             d.yearRelease = set.yearRelease;
@@ -490,7 +486,6 @@ export const getKitDetails = (kitId, req, res) => {
             }
         }
 
-        console.log('d: ',d)
         res.json({details: d});
     }
 }

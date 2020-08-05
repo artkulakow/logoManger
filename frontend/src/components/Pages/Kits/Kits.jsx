@@ -200,6 +200,47 @@ class Kits extends Component {
         )
     }
 
+    renderDisplayModalYearParts = () => {
+        const {kitDetailsLoading, kitDetails} = this.props;
+
+        const year = (kitDetails.yearRelease === undefined) ? '--' : kitDetails.yearRelease;
+        const numParts = (kitDetails.numberParts === undefined) ? '--' : kitDetails.numberParts;
+
+        if (!kitDetailsLoading && year !== '--' && numParts !== '--') {
+            return (
+                <div className="contentLine">
+                    <div className="contentEntry year">
+                        <div className="entryLabel">Release Year</div>
+                        <div className="entryValue">{year}</div>
+                    </div>
+                    <div className="contentEntry numParts">
+                        <div className="entryLabel">Number Pieces</div>
+                        <div className="entryValue">{numParts}</div>
+                    </div>
+                </div>
+            )
+        }
+
+        return null;
+    }
+
+    renderDisplayDetailsCategory = () => {
+        const {kitDetailsLoading, kitDetails} = this.props;
+
+        if (!kitDetailsLoading && kitDetails.fullCategoryName !== undefined && kitDetails.fullCategoryName !== '') {
+            return (
+                <div className="contentLine">
+                    <div className="contentEntry">
+                        <div className="entryLabel">Category</div>
+                        <div className="entryValue">{kitDetails.fullCategoryName}</div>
+                    </div>
+                </div>
+            )
+        }
+
+        return null;
+    }
+
     renderDisplayModalDetails = () => {
         const {displayDetails, displayModify, displayDelete} = this.state;
         const {kitDetailsLoading, kitDetails} = this.props;
@@ -215,15 +256,17 @@ class Kits extends Component {
                 modalContent = (<Loading/>)
             }
             else {
-                const theme = kitDetails["Theme"] === '' ? '--' : kitDetails["Theme"];
-                const name = kitDetails["Name"] === '' ? '--' : kitDetails["Name"];
-                const built = kitDetails["built"] ? 'True' : 'False';
+                const theme = kitDetails.theme === '' ? '--' : kitDetails.theme;
+                const name = kitDetails.name === '' ? '--' : kitDetails.name;
+                const built = kitDetails.built ? 'True' : 'False';
+                const notes = kitDetails.notes === '' ? '--' : kitDetails.notes;
+
                 modalContent = (
                     <div>
                         <div className="contentLine">
                             <div className="contentEntry itemNumber">
                                 <div className="entryLabel">Kit Number</div>
-                                <div className="entryValue">{kitDetails["Item Number"]}</div>
+                                <div className="entryValue">{kitDetails.itemNumber}</div>
                             </div>
 
                             <div className="contentEntry theme">
@@ -237,14 +280,16 @@ class Kits extends Component {
                                 <div className="entryValue">{name}</div>
                             </div>
                         </div>
+                        {this.renderDisplayModalYearParts()}
+                        {this.renderDisplayDetailsCategory()}
                         <div className="contentLine">
                             <div className="contentEntry location">
                                 <div className="entryLabel">Location</div>
-                                <div className="entryValue">{kitDetails["Location"]}</div>
+                                <div className="entryValue">{kitDetails.location}</div>
                             </div>
                             <div className="contentEntry quality">
                                 <div className="entryLabel">Quality</div>
-                                <div className="entryValue">{kitDetails["Quality"]}</div>
+                                <div className="entryValue">{kitDetails.quality}</div>
                             </div>
                             <div className="contentEntry built">
                                 <div className="entryLabel">Built</div>
@@ -254,7 +299,7 @@ class Kits extends Component {
                         <div className="contentLine">
                             <div className="contentEntry notes">
                                 <div className="entryLabel">Notes</div>
-                                <div className="entryValue multiline">{kitDetails["Notes"]}</div>
+                                <div className="entryValue multiline">{notes}</div>
                             </div>
                         </div>
                     </div>

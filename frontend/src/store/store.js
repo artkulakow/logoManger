@@ -18,7 +18,11 @@ function configureStore(state = {
     kitsLocationsLoading: false,
     kitsLocationsError: null,
 }) {
-    return createStore(rootReducer, state, applyMiddleware(thunk));
+    const stores = createStore(rootReducer, state, applyMiddleware(thunk));
+
+    window.stores = stores;
+
+    return stores;
 }
 
 export default configureStore;
