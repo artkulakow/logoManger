@@ -1,10 +1,14 @@
 import React, {Component} from 'react';
+import {connect} from "react-redux";
 import {
     BrowserRouter as Router,
     Switch,
     Route,
     Link,
   } from "react-router-dom";
+
+  import {setUnits} from '../../actions/admin';
+
 
 import Home from "../Pages/Home/Home";
 import Kits from '../Pages/Kits/Kits';
@@ -65,6 +69,18 @@ class MainBody extends Component {
         }
     }
 
+    componentDidMount() {
+        const {setUnits} = this.props;
+
+        const units = localStorage.getItem('units');
+        if (units === null) {
+            setUnits('standard')
+        }
+        else {
+            setUnits(units)
+        };
+    }
+
     onClickNavHandler = (newState) => {
         this.setState({selectedTab: newState})
     }
@@ -112,4 +128,16 @@ class MainBody extends Component {
     }
 }
 
-export default MainBody;
+const mapStateToProps = state => {
+    return {
+        units: state.admin.adminUnits,
+    }
+}
+
+const mapDispatchToProps = dispatch => {
+    return {
+        setUnits: k => dispatch(setUnits(k)),
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(MainBody);

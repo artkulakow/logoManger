@@ -148,11 +148,8 @@ class Kits extends Component {
     kitsContextMenuSelectHandler = (menuId) => {
         const {selectedKit, getKitDetails} = this.props;
 
-        console.log(`kitsContextMenuSelectHandler: ${menuId}`)
         switch (menuId) {
             case 'details':
-                console.log(`details: ${selectedKit}`);
-
                 // get the details;
                 getKitDetails(selectedKit);
 
@@ -163,7 +160,6 @@ class Kits extends Component {
                 });
                 break;
             case 'modify':
-                console.log(`modify: ${selectedKit}`);
                 this.setState({
                     displayModify: true,
                     xPopupLoc: -1,
@@ -171,7 +167,6 @@ class Kits extends Component {
                 });
                 break;
             case 'delete':
-                console.log(`delete: ${selectedKit}`);
                 this.setState({
                     displayDelete: true,
                     xPopupLoc: -1,
@@ -202,7 +197,7 @@ class Kits extends Component {
         )
     }
 
-    renderDisplayModalYearParts = () => {
+    renderDisplayDetailsYearParts = () => {
         const {kitDetailsLoading, kitDetails} = this.props;
 
         const year = (kitDetails.yearRelease === undefined) ? '--' : kitDetails.yearRelease;
@@ -243,12 +238,59 @@ class Kits extends Component {
         return null;
     }
 
+    renderDisplayDetailsDimensions = () => {
+        const {kitDetailsLoading, kitDetails, units} = this.props;
+
+        if (!kitDetailsLoading && kitDetails.widthCm !== undefined && kitDetails.widthCm !== '?') {
+            let width, height, depth, weight;
+            if (units === 'standard') {
+                width = kitDetails.widthInch + 'in'
+                height = kitDetails.heightInch + 'in'
+                depth = kitDetails.depthInch + 'in'
+                weight = kitDetails.weightOunces + 'oz'
+            }
+            else if (units === 'metric') {
+                width = kitDetails.widthCm + 'cm'
+                height = kitDetails.heightCm + 'cm'
+                depth = kitDetails.depthCm + 'cm'
+                weight = kitDetails.weightGrams + 'gm'
+            }
+            else {
+                console.error('Unknown Uints: ', units);
+
+                return null;
+            }
+
+            return (
+                <div className="contentLine">
+                    <div className="contentEntry height">
+                        <div className="entryLabel">Height</div>
+                        <div className="entryValue">{height}</div>
+                    </div>
+                    <div className="contentEntry width">
+                        <div className="entryLabel">Width</div>
+                        <div className="entryValue">{width}</div>
+                    </div>
+                    <div className="contentEntry depth">
+                        <div className="entryLabel">Depth</div>
+                        <div className="entryValue">{depth}</div>
+                    </div>
+                    <div className="contentEntry weight">
+                        <div className="entryLabel">Weight</div>
+                        <div className="entryValue">{weight}</div>
+                    </div>
+                </div>
+            )
+        }
+       
+        return null
+    }
+
     renderDisplayModalDetails = () => {
         const {displayDetails, displayModify, displayDelete} = this.state;
         const {kitDetailsLoading, kitDetails} = this.props;
 
         console.log('kitDetails: ', kitDetails)
-        console.log(`kitDetailsLoading: ${kitDetailsLoading}`)
 
         let modalHeader = 'The Header';
         let modalContent = (<div>The Content</div>);
@@ -282,7 +324,8 @@ class Kits extends Component {
                                 <div className="entryValue">{name}</div>
                             </div>
                         </div>
-                        {this.renderDisplayModalYearParts()}
+                        {this.renderDisplayDetailsYearParts()}
+                        {this.renderDisplayDetailsDimensions()}
                         {this.renderDisplayDetailsCategory()}
                         <div className="contentLine">
                             <div className="contentEntry location">
@@ -403,6 +446,7 @@ const mapStateToProps = state => {
         kitDetails: state.kits.kitDetails,
         kitDetailsError: state.kits.kitDetailsError,
         kitDetailsLoading: state.kits.kitDetailsLoading,
+        units: state.admin.adminUnits,
     }
 }
 
