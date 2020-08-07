@@ -22,6 +22,9 @@ function configureStore(state = {
 
     admin: {
         adminUnits: 'standard',
+        adminUserName: '',
+        adminFirstName: '',
+        adminLastName: '',
     }
 }) {
 

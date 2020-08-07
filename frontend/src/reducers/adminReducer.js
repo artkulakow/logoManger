@@ -1,4 +1,4 @@
-import {ADMIN_UNITS} from '../actions/actionTypes';
+import {ADMIN_UNITS, ADMIN_USER_NAME, ADMIN_FIRST_NAME, ADMIN_LAST_NAME} from '../actions/actionTypes';
 
 export default function admin(state = {}, action) {
     switch (action.type) {
@@ -7,10 +7,20 @@ export default function admin(state = {}, action) {
                 ...state,
                 adminUnits: action.payload,
             }
-        case 'TEST':
+        case ADMIN_USER_NAME:
             return {
                 ...state,
-                adminText: action.payload,
+                adminUserName: action.payload,
+            }
+        case ADMIN_FIRST_NAME:
+            return {
+                ...state,
+                adminFirstName: action.payload,
+            }
+        case ADMIN_LAST_NAME:
+            return {
+                ...state,
+                adminLastName: action.payload,
             }
         default:
             return state;

@@ -1,0 +1,25 @@
+.admin {
+    margin: 15px;
+
+    .header {
+        height: 30px;
+        position: relative;
+        width: 80%;
+        margin-bottom: 5px;
+
+        .label {
+            font-size: 24px;
+            font-weight: bold;
+        }
+    }
+
+    .fieldSetUnits {
+        width: 25%;
+        margin-top: 10px;
+
+        .unitRadioDiv {
+            display: inline-block;
+            margin-right: 15px;
+        }
+    }
+}

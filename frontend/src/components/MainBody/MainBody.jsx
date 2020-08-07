@@ -7,7 +7,7 @@ import {
     Link,
   } from "react-router-dom";
 
-  import {setUnits} from '../../actions/admin';
+  import {setUnits, setUserName, setFirstName, setLastName} from '../../actions/admin';
 
 
 import Home from "../Pages/Home/Home";
@@ -70,7 +70,7 @@ class MainBody extends Component {
     }
 
     componentDidMount() {
-        const {setUnits} = this.props;
+        const {setUnits, setUserName, setFirstName, setLastName} = this.props;
 
         const units = localStorage.getItem('units');
         if (units === null) {
@@ -79,6 +79,19 @@ class MainBody extends Component {
         else {
             setUnits(units)
         };
+
+        let name = localStorage.getItem('userName');
+        if (name !== null) {
+            setUserName(name);
+        }
+        name = localStorage.getItem('firstName');
+        if (name !== null) {
+            setFirstName(name);
+        }
+        name = localStorage.getItem('lastName');
+        if (name !== null) {
+            setLastName(name);
+        }
     }
 
     onClickNavHandler = (newState) => {
@@ -131,12 +144,16 @@ class MainBody extends Component {
 const mapStateToProps = state => {
     return {
         units: state.admin.adminUnits,
+
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
         setUnits: k => dispatch(setUnits(k)),
+        setUserName: k => dispatch(setUserName(k)),
+        setFirstName: k => dispatch(setFirstName(k)),
+        setLastName: k => dispatch(setLastName(k)),
     }
 }
 

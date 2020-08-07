@@ -406,7 +406,7 @@ class Kits extends Component {
                 {this.renderPopupMenu()}
                 <div className="header">
                     <div className="label">
-                        Art's Lego Collection
+                        Lego Collection
                     </div>
                 </div>
 
