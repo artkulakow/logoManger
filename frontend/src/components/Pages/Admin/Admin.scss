@@ -22,4 +22,77 @@
             margin-right: 15px;
         }
     }
+
+    .fieldSetPerson {
+        width: 60%;
+        margin-top: 10px;
+
+        .fieldLabel {
+            font-size: 13px;
+            line-height: 1;
+            font-weight: normal;
+            color: #32363f;
+            margin-bottom: 2px;
+        }
+
+        .field {
+            .inputText {
+                font-size: 16px;
+                outline: none;
+                width: calc(100% - 10px);
+            }
+        }
+
+        .personalLineDiv {
+            margin-bottom: 10px;
+
+            .requiredMsg {
+                font-size: 14px;
+                font-weight: normal;
+                color: #333;
+            }
+
+            .requiredSymbol {
+                font-size: 24px;
+                color: #be1e2d;
+                position: relative;
+                top: 8px;
+                line-height: .3;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+
+            .userNameDiv {
+                width: 40%;
+            }
+
+            .firstNameDiv {
+                display: inline-block;
+                width: calc(50% - 5px);
+                margin-right: 5px;
+            }
+
+            .lastNameDiv {
+                display: inline-block;
+                width: calc(50% - 5px);
+                margin-left: 5px;
+            }
+
+            .updateDiv {
+                .updateBtn {
+                    float: right;
+                    border-radius: 15px;
+                    padding: 5px 15px;
+                    background-color: #1d6fcc;
+                    color: #fff;
+
+                    &:disabled {
+                        background-color: #bcbec0;
+                    }
+                }
+            }
+        }
+    }
 }

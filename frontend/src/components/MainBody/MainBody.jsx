@@ -7,7 +7,7 @@ import {
     Link,
   } from "react-router-dom";
 
-  import {setUnits, setUserName, setFirstName, setLastName} from '../../actions/admin';
+  import {setUnits, setUserName, setFirstName, setLastName, setEmailAddress, setPassword} from '../../actions/admin';
 
 
 import Home from "../Pages/Home/Home";
@@ -70,7 +70,7 @@ class MainBody extends Component {
     }
 
     componentDidMount() {
-        const {setUnits, setUserName, setFirstName, setLastName} = this.props;
+        const {setUnits, setUserName, setFirstName, setLastName, setEmailAddress, setPassword} = this.props;
 
         const units = localStorage.getItem('units');
         if (units === null) {
@@ -80,17 +80,25 @@ class MainBody extends Component {
             setUnits(units)
         };
 
-        let name = localStorage.getItem('userName');
+        const name = localStorage.getItem('userName');
         if (name !== null) {
             setUserName(name);
         }
-        name = localStorage.getItem('firstName');
-        if (name !== null) {
-            setFirstName(name);
+        const firstName = localStorage.getItem('firstName');
+        if (firstName !== null) {
+            setFirstName(firstName);
         }
-        name = localStorage.getItem('lastName');
-        if (name !== null) {
-            setLastName(name);
+        const lastName = localStorage.getItem('lastName');
+        if (lastName !== null) {
+            setLastName(lastName);
+        }
+        const emailAddr = localStorage.getItem('emailAddress');
+        if (emailAddr !== null) {
+            setEmailAddress(emailAddr);
+        }
+        const password = localStorage.getItem('password');
+        if (password !== null) {
+            setPassword(password);
         }
     }
 
@@ -154,6 +162,8 @@ const mapDispatchToProps = dispatch => {
         setUserName: k => dispatch(setUserName(k)),
         setFirstName: k => dispatch(setFirstName(k)),
         setLastName: k => dispatch(setLastName(k)),
+        setEmailAddress: k => dispatch(setEmailAddress(k)),
+        setPassword: k => dispatch(setPassword(k)),
     }
 }
 

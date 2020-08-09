@@ -25,6 +25,8 @@ function configureStore(state = {
         adminUserName: '',
         adminFirstName: '',
         adminLastName: '',
+        adminEmailAddress: '',
+        adminPassword: '',
     }
 }) {
 
