@@ -109,6 +109,8 @@ class MainBody extends Component {
     render() {
         const {selectedTab} = this.state;
 
+        console.log('process: ', process.env.NODE_ENV)
+
         return (
             <div className='mainBody'>
                 <Router>
