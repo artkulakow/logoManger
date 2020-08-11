@@ -27,6 +27,10 @@ function configureStore(state = {
         adminLastName: '',
         adminEmailAddress: '',
         adminPassword: '',
+
+        adminUser: [],
+        adminUserLoading: false,
+        adminUserError: null,
     }
 }) {
 
