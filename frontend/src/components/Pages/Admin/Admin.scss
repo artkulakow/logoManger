@@ -1,96 +1,106 @@
 .admin {
+    width: 75%;
     margin: 15px;
 
     .header {
         height: 30px;
-        position: relative;
         width: 80%;
         margin-bottom: 5px;
+        display: flex;
+        justify-content: space-between;
 
         .label {
             font-size: 24px;
             font-weight: bold;
+            display: inline;
+        }
+
+        .btnDiv {
+            display: inline;
+            margin-right: 0;
+
+            .updateBtn {
+                float: right;
+                border-radius: 15px;
+                padding: 5px 15px;
+                background-color: #1d6fcc;
+                color: #fff;
+
+                &:disabled {
+                    background-color: #bcbec0;
+                }
+            }
         }
     }
 
-    .fieldSetUnits {
-        width: 25%;
-        margin-top: 10px;
+    .guts {
+        width: 100%;
 
-        .unitRadioDiv {
-            display: inline-block;
-            margin-right: 15px;
-        }
-    }
+        .fieldSetUnits {
+            width: 25%;
+            margin-top: 10px;
 
-    .fieldSetPerson {
-        width: 60%;
-        margin-top: 10px;
-
-        .fieldLabel {
-            font-size: 13px;
-            line-height: 1;
-            font-weight: normal;
-            color: #32363f;
-            margin-bottom: 2px;
-        }
-
-        .field {
-            .inputText {
-                font-size: 16px;
-                outline: none;
-                width: calc(100% - 10px);
+            .unitRadioDiv {
+                display: inline-block;
+                margin-right: 15px;
             }
         }
 
-        .personalLineDiv {
-            margin-bottom: 10px;
+        .fieldSetPerson {
+            width: 80%;
+            margin-top: 10px;
 
-            .requiredMsg {
-                font-size: 14px;
+            .fieldLabel {
+                font-size: 13px;
+                line-height: 1;
                 font-weight: normal;
-                color: #333;
+                color: #32363f;
+                margin-bottom: 2px;
             }
 
-            .requiredSymbol {
-                font-size: 24px;
-                color: #be1e2d;
-                position: relative;
-                top: 8px;
-                line-height: .3;
+            .field {
+                .inputText {
+                    font-size: 16px;
+                    outline: none;
+                    width: calc(100% - 10px);
+                }
             }
 
-            &:last-child {
-                margin-bottom: 0;
-            }
+            .personalLineDiv {
+                margin-bottom: 10px;
 
-            .userNameDiv {
-                width: 40%;
-            }
+                .requiredMsg {
+                    font-size: 14px;
+                    font-weight: normal;
+                    color: #333;
+                }
 
-            .firstNameDiv {
-                display: inline-block;
-                width: calc(50% - 5px);
-                margin-right: 5px;
-            }
+                .requiredSymbol {
+                    font-size: 24px;
+                    color: #be1e2d;
+                    position: relative;
+                    top: 8px;
+                    line-height: .3;
+                }
 
-            .lastNameDiv {
-                display: inline-block;
-                width: calc(50% - 5px);
-                margin-left: 5px;
-            }
+                &:last-child {
+                    margin-bottom: 0;
+                }
 
-            .updateDiv {
-                .updateBtn {
-                    float: right;
-                    border-radius: 15px;
-                    padding: 5px 15px;
-                    background-color: #1d6fcc;
-                    color: #fff;
+                .userNameDiv {
+                    width: 40%;
+                }
 
-                    &:disabled {
-                        background-color: #bcbec0;
-                    }
+                .firstNameDiv {
+                    display: inline-block;
+                    width: calc(50% - 5px);
+                    margin-right: 5px;
+                }
+
+                .lastNameDiv {
+                    display: inline-block;
+                    width: calc(50% - 5px);
+                    margin-left: 5px;
                 }
             }
         }

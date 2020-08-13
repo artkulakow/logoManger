@@ -7,7 +7,7 @@ import {
     Link,
   } from "react-router-dom";
 
-  import {setUnits, setUserName, setFirstName, setLastName, setEmailAddress, setPassword, getUser} from '../../actions/admin';
+  import {getUser, setUserId} from '../../actions/admin';
 
 
 import Home from "../Pages/Home/Home";
@@ -70,38 +70,13 @@ class MainBody extends Component {
     }
 
     componentDidMount() {
-        const {setUnits, setUserName, setFirstName, setLastName, setEmailAddress, setPassword, getUser} = this.props;
+        const {setUserId, getUser} = this.props;
 
-        const units = localStorage.getItem('units');
-        if (units === null) {
-            setUnits('standard')
+        const userId = localStorage.getItem('userId');
+        if (userId) {
+            setUserId(userId);
+            getUser(userId);
         }
-        else {
-            setUnits(units)
-        };
-
-        const name = localStorage.getItem('userName');
-        if (name !== null) {
-            setUserName(name);
-        }
-        const firstName = localStorage.getItem('firstName');
-        if (firstName !== null) {
-            setFirstName(firstName);
-        }
-        const lastName = localStorage.getItem('lastName');
-        if (lastName !== null) {
-            setLastName(lastName);
-        }
-        const emailAddr = localStorage.getItem('emailAddress');
-        if (emailAddr !== null) {
-            setEmailAddress(emailAddr);
-        }
-        const password = localStorage.getItem('password');
-        if (password !== null) {
-            setPassword(password);
-        }
-
-        getUser(1);
     }
 
     onClickNavHandler = (newState) => {
@@ -155,20 +130,13 @@ class MainBody extends Component {
 
 const mapStateToProps = state => {
     return {
-        units: state.admin.adminUnits,
-
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        setUnits: k => dispatch(setUnits(k)),
-        setUserName: k => dispatch(setUserName(k)),
-        setFirstName: k => dispatch(setFirstName(k)),
-        setLastName: k => dispatch(setLastName(k)),
-        setEmailAddress: k => dispatch(setEmailAddress(k)),
-        setPassword: k => dispatch(setPassword(k)),
         getUser: k => dispatch(getUser(k)),
+        setUserId: k => dispatch(setUserId(k)),
     }
 }
 

@@ -1,40 +1,15 @@
 import {
-    ADMIN_UNITS, ADMIN_USER_NAME, ADMIN_FIRST_NAME, ADMIN_LAST_NAME,
-    ADMIN_EMAIL_ADDRESS, ADMIN_PASSWORD, GET_ADMIN_USER_START,
+    ADMIN_USER_ID, GET_ADMIN_USER_START,
     GET_ADMIN_USER_SUCCESS, GET_ADMIN_USER_FAILURE,
+    MODIFY_ADMIN_USER_START, MODIFY_ADMIN_USER_SUCCESS, MODIFY_ADMIN_USER_FAILURE,
 } from '../actions/actionTypes';
 
 export default function admin(state = {}, action) {
     switch (action.type) {
-        case ADMIN_UNITS:
+        case ADMIN_USER_ID:
             return {
                 ...state,
-                adminUnits: action.payload,
-            }
-        case ADMIN_USER_NAME:
-            return {
-                ...state,
-                adminUserName: action.payload,
-            }
-        case ADMIN_FIRST_NAME:
-            return {
-                ...state,
-                adminFirstName: action.payload,
-            }
-        case ADMIN_LAST_NAME:
-            return {
-                ...state,
-                adminLastName: action.payload,
-            }
-        case ADMIN_EMAIL_ADDRESS:
-            return {
-                ...state,
-                adminEmailAddress: action.payload,
-            }
-        case ADMIN_PASSWORD:
-            return {
-                ...state,
-                adminPassword: action.payload,
+                adminUserId: action.payload
             }
 
         case GET_ADMIN_USER_START:
@@ -50,13 +25,35 @@ export default function admin(state = {}, action) {
                 adminUser: action.user.data.user
             }
         case GET_ADMIN_USER_FAILURE:
-            console.log('reducers => adminUser: ', {...action.adminUser})
+            console.log('reducers => adminUser: ', {...action})
             return {
                 ...state,
+                adminUser: null,
                 adminUserLoading: false,
-                adminUserError: action.adminUserError,
+                adminUserError: action.userError,
             }
     
+        case MODIFY_ADMIN_USER_START:
+            return {
+                ...state,
+                adminModifyUserLoading: true,
+            }
+        case MODIFY_ADMIN_USER_SUCCESS:
+            return {
+                ...state,
+                adminModifyUserLoading: false,
+                adminModifyUserError: null,
+                adminModifyUser: action.user.data.user
+            }
+        case MODIFY_ADMIN_USER_FAILURE:
+            console.log('reducers => adminUser: ', {...action})
+            return {
+                ...state,
+                adminModifyUser: null,
+                adminModifyUserLoading: false,
+                adminModifyUserError: action.userError,
+            }
+
         default:
             return state;
     }

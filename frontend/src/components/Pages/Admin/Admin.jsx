@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
-import {setUnits} from '../../../actions/admin';
+import {modifyUser} from '../../../actions/admin';
 
 import './Admin.scss';
 
@@ -11,18 +11,32 @@ const Admin = (props) => {
 
     const admin = useSelector(state => state.admin);
     const dispatch = useDispatch();
-    const adminSetUnits = k => dispatch(setUnits(k));
-
-    const userName = admin.adminUserName;
-    const firstName = admin.adminFirstName;
-    const lastName = admin.adminLastName;
-    const emailAddress = admin.adminEmailAddress;
     
+    let userName = '';
+    let firstName = '';
+    let lastName = '';
+    let emailAddress = '';
+    let units = 'standard';
+    let userId = -1;
+    if (admin.adminUserError === null && !admin.adminUserLoading && admin.adminUser != null) {
+        userName = admin.adminUser.userName;
+        firstName = admin.adminUser.firstName;
+        lastName = admin.adminUser.lastName;
+        emailAddress = admin.adminUser.email;
+        units = admin.adminUser.units;
+
+        userId = admin.adminUserId
+    }
+
+    const adminModifyUser = (userId, userName, firstName, lastName, emailAddress, units) => dispatch(modifyUser(userId, userName, firstName, lastName, emailAddress, units));
+   
     const [adminUserName, setAdminUserName] = useState(userName);
     const [adminFirstName, setAdminFirstName] = useState(firstName);
     const [adminLastName, setAdminLastName] = useState(lastName);
     const [adminEmailAddress, setAdminEmailAddress] = useState(emailAddress);
+    const [adminUnits, setAdminUnits] = useState(units)
     const [disablePersonal, setDisablePersonal] = useState( userName === '' | emailAddress === '');
+    const [btnLabel, setBtnLabel] = useState(userId === -1 ? 'Create' : 'Update');
 
     useEffect(() => {
         if (userName) {
@@ -40,7 +54,13 @@ const Admin = (props) => {
         if (emailAddress) {
             setAdminEmailAddress(emailAddress)
         }
-    }, [userName, firstName, lastName, emailAddress])
+
+        if (units) {
+            setAdminUnits(units);
+        }
+
+        setBtnLabel(userId === -1 ? 'Create' : 'Update');
+    }, [userName, firstName, lastName, emailAddress, units, userId])
 
     useEffect(() => {
         setDisablePersonal( adminUserName === '' | adminEmailAddress === '');
@@ -62,21 +82,18 @@ const Admin = (props) => {
         setAdminEmailAddress(e.target.value)
     }
 
-    const onClickUpdatePersonal = () => {
-        localStorage.setItem('userName', adminUserName);
-        localStorage.setItem('firstName', adminFirstName);
-        localStorage.setItem('lastName', adminLastName);
-        localStorage.setItem('emailAddress', adminEmailAddress);
+    const onClickUpdatePersonal = (id) => {
+        adminModifyUser(userId, adminUserName, adminFirstName, adminLastName, adminEmailAddress, adminUnits);
     }
 
     const onChangeUnits = (units) => {
-        adminSetUnits(units);
+        setAdminUnits(units);
 
         localStorage.setItem('units', units);
     }
 
-    const selectedUnitStandard = admin.adminUnits === 'standard' ? true : false;
-    const selectedUnitMetric = admin.adminUnits === 'metric' ? true : false;
+    const selectedUnitStandard = adminUnits === 'standard' ? true : false;
+    const selectedUnitMetric = adminUnits === 'metric' ? true : false;
 
     return (
         <Fragment>
@@ -85,7 +102,12 @@ const Admin = (props) => {
                 <div className="label">
                     Admin / Settings
                 </div>
+                <div className="btnDiv">
+                    <button type="button" className="updateBtn" onClick={() => onClickUpdatePersonal(userId)} disabled={disablePersonal}>{btnLabel}</button>
+                </div>
+            </div>
 
+            <div className="guts">
                 <fieldset className="fieldSetPerson">
                     <legend>User Account</legend>
                     <div className="personalLineDiv">
@@ -122,11 +144,6 @@ const Admin = (props) => {
                             <div className="field">
                                 <input type="email" pattern={emailPattern} className="inputText" value={adminEmailAddress} onChange={onChangeEmailAddress} placeholder="Email Address" maxLength="256"></input>
                             </div>                        
-                        </div>
-                    </div>
-                    <div className="personalLineDiv">
-                        <div className="updateDiv">
-                            <button type="button" className="updateBtn" onClick={() => onClickUpdatePersonal()} disabled={disablePersonal}>Update</button>
                         </div>
                     </div>
                 </fieldset>

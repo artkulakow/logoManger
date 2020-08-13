@@ -22,15 +22,17 @@ function configureStore(state = {
 
     admin: {
         adminUnits: 'standard',
-        adminUserName: '',
-        adminFirstName: '',
-        adminLastName: '',
-        adminEmailAddress: '',
-        adminPassword: '',
 
-        adminUser: [],
+        adminUserId: -1,
+
+        adminUser: null,
         adminUserLoading: false,
         adminUserError: null,
+
+        adminModifyUser: null,
+        adminModifyUserLoading: false,
+        adminModifyUserError: null,
+
     }
 }) {
 
