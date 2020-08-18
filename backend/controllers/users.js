@@ -16,6 +16,14 @@ const loadAllUsers = (req, res) => {
         fs.readFile(cFile, (err, cacheData) => {
             if (err) {
                 console.error('Unable to read cache file: ' + cFile);
+                res.status(404)
+                   .json({
+                        field: '',
+                        errorNum: 210,
+                        msg: `Internal Error - try again in a few minutes`,
+                        details: `loadAllUsers - Unable to read cache file: ${cFile}`,
+                    })
+                   .end()
             }
 
             try {
@@ -25,6 +33,14 @@ const loadAllUsers = (req, res) => {
             }
             catch(err) {
                 console.error('Unable to convert kits cache file to json: ', err);
+                res.status(404)
+                   .json({
+                        field: '',
+                        errorNum: 211,
+                        msg: `Internal Error - try again in a few minutes`,
+                        details: `loadAllUsers - Unable to convert kits cache file to json: ` + err.toString(),
+                    })
+                   .end()
             }
         })
     }
@@ -45,7 +61,12 @@ const sendUserData = (userId, req, res) => {
 
     if (userIndex === -1) {
         res.status(404)
-           .json({field: 'userId',msg: `User id ${userId} not found`})
+           .json({
+                field: 'userId',
+                errorNum: 200,
+                msg: 'Internal Error - try again in a few minutes',
+                details: `User id ${userId} not found`
+            })
            .end()
 
         return
@@ -61,6 +82,14 @@ const loadUserData = (userId, req, res) => {
         fs.readFile(cFile, (err, cacheData) => {
             if (err) {
                 console.error('Unable to read cache file: ' + cFile);
+                res.status(404)
+                   .json({
+                        field: '',
+                        errorNum: 215,
+                        msg: `Internal Error - try again in a few minutes`,
+                        details: `loadUserData - Unable to read cache file: ${cFile}`,
+                    })
+                   .end()
             }
 
             try {
@@ -72,6 +101,14 @@ const loadUserData = (userId, req, res) => {
             }
             catch(err) {
                 console.error('Unable to convert kits cache file to json: ', err);
+                res.status(404)
+                   .json({
+                        field: '',
+                        errorNum: 216,
+                        msg: `Internal Error - try again in a few minutes`,
+                        details: `loadUserData - Unable to convert kits cache file to json: ` + err.toString(),
+                    })
+                   .end()
             }
         })
 
@@ -96,7 +133,12 @@ const modifyUserData = (userId, req, res) => {
     // make sure the user id exists 
     if (userIndex === -1) {
         res.status(404)
-           .json({field: 'userId', msg: `User id ${userId} not found`})
+           .json({
+                field: 'userId',
+                errorNum: 201,
+                msg: 'Internal Error - try again in a few minutes',
+                details: `User id ${userId} not found`
+            })
            .end()
 
         return
@@ -108,7 +150,12 @@ const modifyUserData = (userId, req, res) => {
         const emailIndex = userData.findIndex((user) => user.email === email);
         if (emailIndex !== -1 && emailIndex !== userIndex) {
             res.status(404)
-               .json({field: 'email', msg: `Email ${email} is not unique`})
+               .json({
+                    field: 'email',
+                    errorNum: 202,
+                    msg: `Email ${email} is not unique`,
+                    details: `Email ${email} is not unique`
+                })
                .end()
     
             return
@@ -132,7 +179,15 @@ const modifyUserData = (userId, req, res) => {
     fs.writeFile(cFile, jsonString, err => {
         if (err) {
             console.error("Unable to write kits cache file: " + cFile);
-        }
+            res.status(404)
+            .json({
+                 field: '',
+                 errorNum: 220,
+                 msg: `Internal Error - try again in a few minutes`,
+                 details: `modifyUserData - Unable to write cache file: ${cFile}`,
+             })
+            .end()
+ }
         else {
             console.log('Kits Cache File written');
         }
@@ -150,7 +205,15 @@ export const modifyUser = (userId, req, res) => {
             fs.readFile(cFile, (err, cacheData) => {
                 if (err) {
                     console.error('Unable to read cache file: ' + cFile);
-                }
+                    res.status(404)
+                    .json({
+                         field: '',
+                         errorNum: 230,
+                         msg: `Internal Error - try again in a few minutes`,
+                         details: `modifyUser - Unable to read cache file: ${cFile}`,
+                     })
+                    .end()
+                 }
     
                 try {
                     const obj = JSON.parse(cacheData);
@@ -161,7 +224,15 @@ export const modifyUser = (userId, req, res) => {
                 }
                 catch(err) {
                     console.error('Unable to convert kits cache file to json: ', err);
-                }
+                    res.status(404)
+                    .json({
+                         field: '',
+                         errorNum: 235,
+                         msg: `Internal Error - try again in a few minutes`,
+                         details: `modifyUser - Unable to convert kits cache file to json: ` + err.toString(),
+                     })
+                    .end()
+                 }
             })
         }
 
@@ -177,7 +248,12 @@ const addUser = (req, res) => {
     // make sure there is a user name and email address
     if (!(payload.email && payload.email !== '') || !(payload.userName && payload.userName !== '')) {
         res.status(404)
-           .json({field: 'email, userName', msg: `Missing email or user name`})
+           .json({
+                field: 'email, userName',
+                errorNum: 203,
+                msg: `Missing email or user name`,
+                details: `Missing email or user name`
+            })
            .end()
 
         return;
@@ -188,7 +264,12 @@ const addUser = (req, res) => {
     const emailIndex = userData.findIndex((user) => user.email === email);
     if (emailIndex !== -1) {
         res.status(404)
-           .json({field: 'email', msg: `Email ${email} is not unique`})
+           .json({
+                field: 'email',
+                errorNum: 204,
+                msg: `Email ${email} is not unique`,
+                details: `Email ${email} is not unique`
+            })
            .end()
 
         return;
@@ -238,7 +319,15 @@ const addUser = (req, res) => {
     fs.writeFile(cFile, jsonString, err => {
         if (err) {
             console.error("Unable to write kits cache file: " + cFile);
-        }
+            res.status(404)
+            .json({
+                 field: '',
+                 errorNum: 225,
+                 msg: `Internal Error - try again in a few minutes`,
+                 details: `addUser - Unable to write cache file: ${cFile}`,
+             })
+            .end()
+ }
         else {
             console.log('Kits Cache File written');
         }
@@ -257,6 +346,14 @@ export const createUser = (req, res) => {
             fs.readFile(cFile, (err, cacheData) => {
                 if (err) {
                     console.error('Unable to read cache file: ' + cFile);
+                    res.status(404)
+                    .json({
+                         field: '',
+                         errorNum: 240,
+                         msg: `Internal Error - try again in a few minutes`,
+                         details: `createUser - Unable to read cache file: ${cFile}`,
+                     })
+                    .end()
                 }
     
                 try {
@@ -268,6 +365,14 @@ export const createUser = (req, res) => {
                 }
                 catch(err) {
                     console.error('Unable to convert kits cache file to json: ', err);
+                    res.status(404)
+                    .json({
+                         field: '',
+                         errorNum: 245,
+                         msg: `Internal Error - try again in a few minutes`,
+                         details: `createUser - Unable to convert kits cache file to json: ` + err.toString(),
+                     })
+                    .end()
                 }
             })
         }

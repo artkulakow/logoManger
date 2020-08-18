@@ -113,9 +113,10 @@ const Admin = (props) => {
         }
 
         const errMsg = admin.adminModifyUserError.data.msg;
+        const errNum = admin.adminModifyUserError.data.errorNum;
 
         return (
-            <div className="errMsgHeader">ERROR - {errMsg}</div>
+            <div className="errMsgHeader">ERROR - {errMsg} (Error Number: {errNum})</div>
         )
     }
 
