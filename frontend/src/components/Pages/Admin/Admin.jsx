@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from 'react';
+import React, { useState, useEffect, Fragment} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 
 import {modifyUser} from '../../../actions/admin';
@@ -37,6 +37,8 @@ const Admin = (props) => {
     const [adminUnits, setAdminUnits] = useState(units)
     const [disablePersonal, setDisablePersonal] = useState( userName === '' | emailAddress === '');
     const [btnLabel, setBtnLabel] = useState(userId === -1 ? 'Create' : 'Update');
+    const [displayError, setDisplayError] = useState(false);
+    const [fieldInError, setFieldInError] = useState('');
 
     useEffect(() => {
         if (userName) {
@@ -66,6 +68,18 @@ const Admin = (props) => {
         setDisablePersonal( adminUserName === '' | adminEmailAddress === '');
     }, [adminUserName, adminEmailAddress])
 
+    useEffect(() => {
+        if (admin.adminModifyUserError !== null) {
+            setDisplayError(true);
+            setFieldInError(admin.adminModifyUserError.data.field);
+        }
+        else {
+            setDisplayError(false);
+            setFieldInError('');
+        }
+        
+    }, [admin])
+
     const onChangeUserName = (e) => {
         setAdminUserName(e.target.value)
     }
@@ -92,8 +106,26 @@ const Admin = (props) => {
         localStorage.setItem('units', units);
     }
 
+    const displayErrorComponent = () => {
+
+        if (!displayError) {
+            return
+        }
+
+        const errMsg = admin.adminModifyUserError.data.msg;
+
+        return (
+            <div className="errMsgHeader">ERROR - {errMsg}</div>
+        )
+    }
+
     const selectedUnitStandard = adminUnits === 'standard' ? true : false;
     const selectedUnitMetric = adminUnits === 'metric' ? true : false;
+
+    let emailFieldDivStyle = 'emailAddrDiv';
+    if (fieldInError === 'email') {
+        emailFieldDivStyle += ' fieldError'
+    }
 
     return (
         <Fragment>
@@ -106,6 +138,8 @@ const Admin = (props) => {
                     <button type="button" className="updateBtn" onClick={() => onClickUpdatePersonal(userId)} disabled={disablePersonal}>{btnLabel}</button>
                 </div>
             </div>
+
+            {displayErrorComponent()}
 
             <div className="guts">
                 <fieldset className="fieldSetPerson">
@@ -139,7 +173,7 @@ const Admin = (props) => {
                         </div>
                     </div>
                     <div className="personalLineDiv">
-                        <div className="emailAddrDiv">
+                        <div className={emailFieldDivStyle}>
                             <div className="fieldLabel">Email Address <span className="requiredSymbol">*</span></div>
                             <div className="field">
                                 <input type="email" pattern={emailPattern} className="inputText" value={adminEmailAddress} onChange={onChangeEmailAddress} placeholder="Email Address" maxLength="256"></input>

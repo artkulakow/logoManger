@@ -29,7 +29,6 @@ function configureStore(state = {
         adminUserLoading: false,
         adminUserError: null,
 
-        adminModifyUser: null,
         adminModifyUserLoading: false,
         adminModifyUserError: null,
 

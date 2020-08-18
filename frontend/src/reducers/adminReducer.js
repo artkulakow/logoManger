@@ -43,15 +43,15 @@ export default function admin(state = {}, action) {
                 ...state,
                 adminModifyUserLoading: false,
                 adminModifyUserError: null,
-                adminModifyUser: action.user.data.user
+                adminUser: action.user.data.user
             }
         case MODIFY_ADMIN_USER_FAILURE:
-            console.log('reducers => adminUser: ', {...action})
+            console.log('reducers => adminUser: ', {...action.userError.response})
             return {
                 ...state,
-                adminModifyUser: null,
+                // adminUser: null,
                 adminModifyUserLoading: false,
-                adminModifyUserError: action.userError,
+                adminModifyUserError: action.userError.response,
             }
 
         default:

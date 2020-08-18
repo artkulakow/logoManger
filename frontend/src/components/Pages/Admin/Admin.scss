@@ -33,6 +33,12 @@
         }
     }
 
+    .errMsgHeader {
+        font-size: 16px;
+        font-weight: bold;
+        color: #ed1c24;
+    }
+
     .guts {
         width: 100%;
 
@@ -101,6 +107,19 @@
                     display: inline-block;
                     width: calc(50% - 5px);
                     margin-left: 5px;
+                }
+
+                .fieldError {
+                    .fieldLabel {
+                        color: #ed1c24;
+                    }
+
+                    .field {
+                        .inputText {
+                            border-color: #ed1c24;
+                            color: #ed1c24;
+                        }
+                    }
                 }
             }
         }

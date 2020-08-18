@@ -44,8 +44,9 @@ const sendUserData = (userId, req, res) => {
     const userIndex = userData.findIndex((user) => user.id === userId);
 
     if (userIndex === -1) {
-        res.statusMessage = `User id ${userId} not found`
-        res.status(404).send(`User id ${userId} not found`).end()
+        res.status(404)
+           .json({field: 'userId',msg: `User id ${userId} not found`})
+           .end()
 
         return
     }
@@ -94,8 +95,9 @@ const modifyUserData = (userId, req, res) => {
 
     // make sure the user id exists 
     if (userIndex === -1) {
-        res.statusMessage = `User id ${userId} not found`
-        res.status(404).send(`User id ${userId} not found`).end()
+        res.status(404)
+           .json({field: 'userId', msg: `User id ${userId} not found`})
+           .end()
 
         return
     }
@@ -105,8 +107,9 @@ const modifyUserData = (userId, req, res) => {
         const email = payload.email;
         const emailIndex = userData.findIndex((user) => user.email === email);
         if (emailIndex !== -1 && emailIndex !== userIndex) {
-            res.statusMessage = `Email ${email} is not unique`
-            res.status(404).send(`Email ${email} is not unique`).end()
+            res.status(404)
+               .json({field: 'email', msg: `Email ${email} is not unique`})
+               .end()
     
             return
             }
@@ -173,8 +176,9 @@ const addUser = (req, res) => {
 
     // make sure there is a user name and email address
     if (!(payload.email && payload.email !== '') || !(payload.userName && payload.userName !== '')) {
-        res.statusMessage = `Missing email or user name`;
-        res.status(404).send(`Missing email or user name`).end()
+        res.status(404)
+           .json({field: 'email, userName', msg: `Missing email or user name`})
+           .end()
 
         return;
     }
@@ -183,8 +187,9 @@ const addUser = (req, res) => {
     const email = payload.email;
     const emailIndex = userData.findIndex((user) => user.email === email);
     if (emailIndex !== -1) {
-        res.statusMessage = `Email ${email} is not unique`;
-        res.status(404).send(`Email ${email} is not unique`).end()
+        res.status(404)
+           .json({field: 'email', msg: `Email ${email} is not unique`})
+           .end()
 
         return;
     }
