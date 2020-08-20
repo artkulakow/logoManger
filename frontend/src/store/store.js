@@ -1,6 +1,6 @@
-import { createStore, applyMiddleware } from "redux";
+import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
-import reducer from "../reducers/index";
+import reducer from '../reducers/index';
 
 function configureStore(state = {
     kits: {
@@ -31,12 +31,15 @@ function configureStore(state = {
 
         adminModifyUserLoading: false,
         adminModifyUserError: null,
+        adminModifyUserSuccess: false,
 
-    }
+        adminCreateUserLoading: false,
+        adminCreateUserError: null,
+    },
 }) {
-
     const stores = createStore(reducer, state, applyMiddleware(thunk));
 
+    // eslint-disable-next-line no-undef
     window.stores = stores;
 
     return stores;

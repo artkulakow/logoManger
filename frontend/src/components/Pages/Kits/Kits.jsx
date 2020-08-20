@@ -62,7 +62,7 @@ const legoColumns = [
 ];
 
 class Kits extends Component {
-    displayName = "Kits";
+    displayName = 'Kits';
 
     kitsContextMenu = [
         {
@@ -244,10 +244,10 @@ class Kits extends Component {
         if (!kitDetailsLoading && kitDetails.widthCm !== undefined && kitDetails.widthCm !== '?') {
             let width, height, depth, weight;
             if (units === 'standard') {
-                width = kitDetails.widthInch + 'in'
-                height = kitDetails.heightInch + 'in'
-                depth = kitDetails.depthInch + 'in'
-                weight = kitDetails.weightOunces + 'oz'
+                width = kitDetails.widthInch + 'in';
+                height = kitDetails.heightInch + 'in';
+                depth = kitDetails.depthInch + 'in';
+                weight = kitDetails.weightOunces + 'oz';
             }
             else if (units === 'metric') {
                 width = kitDetails.widthCm + 'cm'

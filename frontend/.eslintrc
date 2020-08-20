@@ -1,0 +1,17 @@
+{
+    "parser": "babel-eslint",
+    "extends": ["airbnb", "airbnb/hooks"],
+    "parserOptions": {
+        "ecmaVersion": 2018,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "rules": {
+      "max-len": [1, 200, 2, { "ignoreComments": true }],
+      "indent": ["error", 4],
+      "react/jsx-indent": ["error", 4],
+      "react/jsx-indent-props": ["error", 4]
+    }
+  }

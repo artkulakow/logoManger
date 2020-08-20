@@ -333,6 +333,7 @@ const addUser = (req, res) => {
         }
     })
     
+    console.log('newUser: ', newUser)
     res.json({user: newUser});
 }
 
