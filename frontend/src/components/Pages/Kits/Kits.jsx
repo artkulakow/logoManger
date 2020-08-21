@@ -1,8 +1,10 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import ReactModal from 'react-modal';
-import {connect} from "react-redux";
+import { connect } from 'react-redux';
 
-import {loadKits, setFetchKits, getKits , getKitsThemes, getKitsLocations, getKitDetails} from '../../../actions/kits';
+import {
+    getKits, getKitsThemes, getKitsLocations, getKitDetails,
+} from '../../../actions/kits';
 
 import MyTable from '../../MyTable/MyTable';
 
@@ -13,9 +15,9 @@ import './Kits.scss';
 
 const legoColumns = [
     {
-        label: "Item Number",
-        headerStyle: {width:'149px'},
-        entryStyle: {width: '149px'},
+        label: 'Item Number',
+        headerStyle: { width: '149px' },
+        entryStyle: { width: '149px' },
         position: 'left',
         field: 'Item Number',
         sortable: true,
@@ -25,9 +27,9 @@ const legoColumns = [
         searchType: 'numeric',
     },
     {
-        label: "Theme",
-        headerStyle: {width:'249px'},
-        entryStyle: {width: '249px'},
+        label: 'Theme',
+        headerStyle: { width: '249px' },
+        entryStyle: { width: '249px' },
         position: 'center',
         field: 'Theme',
         sortable: true,
@@ -37,31 +39,32 @@ const legoColumns = [
         searchDropdownData: [],
     },
     {
-        label: "Name",
-        headerStyle: {width:"calc(100% - 675px)"},
-        entryStyle: {width:"calc(100% - 659px)"},
+        label: 'Name',
+        headerStyle: { width: 'calc(100% - 675px)' },
+        entryStyle: { width: 'calc(100% - 659px)' },
         position: 'left',
         field: 'Name',
         sortable: true,
         search: true,
         searchType: 'text',
         searchEnableCaseSensitive: true,
-        searchEnableSubstring: true
+        searchEnableSubstring: true,
     },
     {
         label: 'Location',
-        headerStyle: {width: '274px'},
-        entryStyle: {width: '258px'},
+        headerStyle: { width: '274px' },
+        entryStyle: { width: '258px' },
         position: 'left',
         field: 'Location',
         search: true,
         searchType: 'dropdown',
         searchDropdownData: [],
-    }
+    },
 
 ];
 
 class Kits extends Component {
+    // eslint-disable-next-line react/static-property-placement
     displayName = 'Kits';
 
     kitsContextMenu = [
@@ -82,27 +85,26 @@ class Kits extends Component {
             label: 'Delete',
             tooltip: 'Delete Selected Kit',
             fontIcon: 'icon-delete-circle',
-        }
+        },
     ]
 
     constructor(props) {
         super(props);
 
         this.state = {
-            searchDropdownsLoaded: false,
-
             xPopupLoc: -1,
             yPopupLoc: -1,
 
             displayDetails: false,
             displayModify: false,
             displayDelete: false,
-        }
+        };
     }
 
     componentDidMount() {
-        const {kitsThemes, kitsLocations, getKitsThemes, getKitsLocations} = this.props;
-
+        const {
+            kitsThemes, kitsLocations, getKitsThemes, getKitsLocations,
+        } = this.props;
 
         if (kitsThemes !== undefined && kitsThemes.length === 0) {
             getKitsThemes();
@@ -113,8 +115,8 @@ class Kits extends Component {
         }
     }
 
-    componentDidUpdate(prevProps) {
-        const {kitsLoading, kitsLocations, kitsThemes} = this.props;
+    componentDidUpdate() {
+        const { kitsLoading, kitsLocations, kitsThemes } = this.props;
 
         if (!kitsLocations || !kitsThemes) {
             return;
@@ -131,59 +133,60 @@ class Kits extends Component {
         }
     }
 
-    kitClickHandler = (index, id, event) => {
+    kitClickHandler = () => {
         this.setState({
             xPopupLoc: -1,
             yPopupLoc: -1,
-        });     
+        });
     }
 
-    kitContextMenuHandler = (index, id, event) =>  {
+    kitContextMenuHandler = (index, id, event) => {
         this.setState({
             xPopupLoc: event.pageX,
             yPopupLoc: event.pageY,
-        })
+        });
     }
 
     kitsContextMenuSelectHandler = (menuId) => {
-        const {selectedKit, getKitDetails} = this.props;
+        const { selectedKit, getKitDetails } = this.props;
 
         switch (menuId) {
-            case 'details':
-                // get the details;
-                getKitDetails(selectedKit);
+        case 'details':
+            // get the details;
+            getKitDetails(selectedKit);
 
-                this.setState({
-                    xPopupLoc: -1,
-                    yPopupLoc: -1,
-                    displayDetails: true,
-                });
-                break;
-            case 'modify':
-                this.setState({
-                    displayModify: true,
-                    xPopupLoc: -1,
-                    yPopupLoc: -1,
-                });
-                break;
-            case 'delete':
-                this.setState({
-                    displayDelete: true,
-                    xPopupLoc: -1,
-                    yPopupLoc: -1,
-                });
-                break;
-            default:
-                console.error(`Unknown context menu type: ${menuId}`)
+            this.setState({
+                xPopupLoc: -1,
+                yPopupLoc: -1,
+                displayDetails: true,
+            });
+            break;
+        case 'modify':
+            this.setState({
+                displayModify: true,
+                xPopupLoc: -1,
+                yPopupLoc: -1,
+            });
+            break;
+        case 'delete':
+            this.setState({
+                displayDelete: true,
+                xPopupLoc: -1,
+                yPopupLoc: -1,
+            });
+            break;
+        default:
+            // eslint-disable-next-line no-console
+            console.error(`Unknown context menu type: ${menuId}`);
         }
     }
 
-    kitDoubleClickHandler = (index, id, event) => {
-        const {selectedKit, getKitDetails} = this.props;
+    kitDoubleClickHandler = () => {
+        const { selectedKit, getKitDetails } = this.props;
 
         getKitDetails(selectedKit);
 
-        this.setState({displayDetails: true,});
+        this.setState({ displayDetails: true });
     }
 
     closeModalHandler = () => {
@@ -193,12 +196,12 @@ class Kits extends Component {
                 displayDelete: false,
                 displayDetails: false,
                 displayModify: false,
-            }
-        )
+            },
+        );
     }
 
     renderDisplayDetailsYearParts = () => {
-        const {kitDetailsLoading, kitDetails} = this.props;
+        const { kitDetailsLoading, kitDetails } = this.props;
 
         const year = (kitDetails.yearRelease === undefined) ? '--' : kitDetails.yearRelease;
         const numParts = (kitDetails.numberParts === undefined) ? '--' : kitDetails.numberParts;
@@ -215,14 +218,14 @@ class Kits extends Component {
                         <div className="entryValue">{numParts}</div>
                     </div>
                 </div>
-            )
+            );
         }
 
         return null;
     }
 
     renderDisplayDetailsCategory = () => {
-        const {kitDetailsLoading, kitDetails} = this.props;
+        const { kitDetailsLoading, kitDetails } = this.props;
 
         if (!kitDetailsLoading && kitDetails.fullCategoryName !== undefined && kitDetails.fullCategoryName !== '') {
             return (
@@ -232,30 +235,30 @@ class Kits extends Component {
                         <div className="entryValue">{kitDetails.fullCategoryName}</div>
                     </div>
                 </div>
-            )
+            );
         }
 
         return null;
     }
 
     renderDisplayDetailsDimensions = () => {
-        const {kitDetailsLoading, kitDetails, units} = this.props;
+        const { kitDetailsLoading, kitDetails, units } = this.props;
 
         if (!kitDetailsLoading && kitDetails.widthCm !== undefined && kitDetails.widthCm !== '?') {
-            let width, height, depth, weight;
+            let width; let height; let depth; let
+                weight;
             if (units === 'standard') {
-                width = kitDetails.widthInch + 'in';
-                height = kitDetails.heightInch + 'in';
-                depth = kitDetails.depthInch + 'in';
-                weight = kitDetails.weightOunces + 'oz';
-            }
-            else if (units === 'metric') {
-                width = kitDetails.widthCm + 'cm'
-                height = kitDetails.heightCm + 'cm'
-                depth = kitDetails.depthCm + 'cm'
-                weight = kitDetails.weightGrams + 'gm'
-            }
-            else {
+                width = `${kitDetails.widthInch}in`;
+                height = `${kitDetails.heightInch}in`;
+                depth = `${kitDetails.depthInch}in`;
+                weight = `${kitDetails.weightOunces}oz`;
+            } else if (units === 'metric') {
+                width = `${kitDetails.widthCm}cm`;
+                height = `${kitDetails.heightCm}cm`;
+                depth = `${kitDetails.depthCm}cm`;
+                weight = `${kitDetails.weightGrams}gm`;
+            } else {
+                // eslint-disable-next-line no-console
                 console.error('Unknown Uints: ', units);
 
                 return null;
@@ -280,26 +283,23 @@ class Kits extends Component {
                         <div className="entryValue">{weight}</div>
                     </div>
                 </div>
-            )
+            );
         }
-       
-        return null
+
+        return null;
     }
 
     renderDisplayModalDetails = () => {
-        const {displayDetails, displayModify, displayDelete} = this.state;
-        const {kitDetailsLoading, kitDetails} = this.props;
+        const { displayDetails, displayModify, displayDelete } = this.state;
+        const { kitDetailsLoading, kitDetails } = this.props;
 
-        console.log('kitDetails: ', kitDetails)
-
-        let modalHeader = 'The Header';
+        const modalHeader = 'The Header';
         let modalContent = (<div>The Content</div>);
-        let modalButtons = (<button className="modalBtn" onClick={this.closeModalHandler}>Close</button>);
+        const modalButtons = (<input type="button" className="modalBtn" onClick={this.closeModalHandler} value="Close" />);
         if (displayDetails) {
             if (kitDetailsLoading) {
-                modalContent = (<Loading/>)
-            }
-            else {
+                modalContent = (<Loading />);
+            } else {
                 const theme = kitDetails.theme === '' ? '--' : kitDetails.theme;
                 const name = kitDetails.name === '' ? '--' : kitDetails.name;
                 const built = kitDetails.built ? 'True' : 'False';
@@ -348,7 +348,7 @@ class Kits extends Component {
                             </div>
                         </div>
                     </div>
-                )
+                );
             }
         }
 
@@ -357,14 +357,14 @@ class Kits extends Component {
                 isOpen={displayDetails || displayModify || displayDelete}
                 contentLabel="Kit Details"
                 className="modalDialog detailsDialog"
-                overlanClassName='modalOverlay'
+                overlanClassName="modalOverlay"
                 xonRequestClose={this.closeModalHandler}
             >
                 <div className="kitsModals">
                     <div className="modalHeaderDiv">
                         {modalHeader}
                     </div>
-                    <hr></hr>
+                    <hr />
                     <div className="modalContentDiv">
                         {modalContent}
                     </div>
@@ -376,11 +376,11 @@ class Kits extends Component {
                     </div>
                 </div>
             </ReactModal>
-        )
+        );
     }
 
     renderPopupMenu = () => {
-        const {xPopupLoc, yPopupLoc} = this.state;
+        const { xPopupLoc, yPopupLoc } = this.state;
 
         if (xPopupLoc !== -1) {
             return (
@@ -392,13 +392,17 @@ class Kits extends Component {
                 />
             );
         }
+
+        return null;
     }
 
     render() {
         const legoFilters = [];
         const legoSelectActions = [];
 
-        const {kits, kitsLoading, kitsError, getKits} = this.props;
+        const {
+            kits, kitsLoading, kitsError, getKits,
+        } = this.props;
 
         return (
             <div className="kits">
@@ -413,14 +417,14 @@ class Kits extends Component {
                 <MyTable
                     columns={legoColumns}
                     filters={legoFilters}
-                    multiselect={true}
+                    multiselect
                     selectActions={legoSelectActions}
                     data={kits}
                     loading={kitsLoading === undefined ? false : kitsLoading}
                     loadingError={kitsError}
-                    selectEntry={true}
+                    selectEntry
                     fetchDataFunc={getKits}
-                    displaySearch={true}
+                    displaySearch
                     toolbar={this.kitsContextMenu}
                     toolbarHandler={this.kitsContextMenuSelectHandler}
                     clickHandler={this.kitClickHandler}
@@ -428,37 +432,30 @@ class Kits extends Component {
                     doubleClickHandler={this.kitDoubleClickHandler}
                 />
 
-                
             </div>
         );
     }
 }
 
-const mapStateToProps = state => {
-    return {
-        kits: state.kits.kits,
-        fetchKits: state.kits.fetchKits,
-        selectedKit: state.kits.selectedKit,
-        kitsLoading: state.kits.kitsLoading,
-        kitsError: state.kits.kitsError,
-        kitsThemes: state.kits.kitsThemes,
-        kitsLocations: state.kits.kitsLocations,
-        kitDetails: state.kits.kitDetails,
-        kitDetailsError: state.kits.kitDetailsError,
-        kitDetailsLoading: state.kits.kitDetailsLoading,
-        units: state.admin.adminUnits,
-    }
-}
+const mapStateToProps = (state) => ({
+    kits: state.kits.kits,
+    fetchKits: state.kits.fetchKits,
+    selectedKit: state.kits.selectedKit,
+    kitsLoading: state.kits.kitsLoading,
+    kitsError: state.kits.kitsError,
+    kitsThemes: state.kits.kitsThemes,
+    kitsLocations: state.kits.kitsLocations,
+    kitDetails: state.kits.kitDetails,
+    kitDetailsError: state.kits.kitDetailsError,
+    kitDetailsLoading: state.kits.kitDetailsLoading,
+    units: state.admin.adminUnits,
+});
 
-const mapDispatchToProps = dispatch => {
-    return {
-        loadKits: k => dispatch(loadKits(k)),
-        setFetchKits: state => dispatch(setFetchKits(state)),
-        getKits: k => dispatch(getKits(k)),
-        getKitsThemes: k => dispatch(getKitsThemes(k)),
-        getKitsLocations: k => dispatch(getKitsLocations(k)),
-        getKitDetails: k => dispatch(getKitDetails(k))
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    getKits: (k) => dispatch(getKits(k)),
+    getKitsThemes: (k) => dispatch(getKitsThemes(k)),
+    getKitsLocations: (k) => dispatch(getKitsLocations(k)),
+    getKitDetails: (k) => dispatch(getKitDetails(k)),
+});
 
-export default connect(mapStateToProps, mapDispatchToProps)(Kits)
+export default connect(mapStateToProps, mapDispatchToProps)(Kits);

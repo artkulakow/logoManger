@@ -1,17 +1,11 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import './Loading.scss';
 
-class Loading extends Component {
-    displayName = "MyTable";
-
-    render() {
-        return (
-            <div className="loadingDiv">
-                <div className="loading"></div>
-            </div>
-        );
-    }
-}
+const Loading = () => (
+    <div className="loadingDiv">
+        <div className="loading" />
+    </div>
+);
 
 export default Loading;

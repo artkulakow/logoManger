@@ -1,16 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 
-//import './Themes.scss';
-
-class Themes extends Component {
-    render() {
-        return (
-            <div className="themes">
-                <h1>Themes</h1>
-            </div>
-        );
-    }
-}
-
+const Themes = () => (
+    <div className="themes">
+        <h1>Themes</h1>
+    </div>
+);
 
 export default Themes;
